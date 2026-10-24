@@ -1,28 +1,17 @@
 import Link from "next/link";
-import { site } from "@/data/site";
 import { jobs, community } from "@/data/experience";
 import { notes } from "@/data/notes";
 import { changelog } from "@/data/changelog";
 import { featuredProjects, alsoBuilt } from "@/lib/projects";
 import { Section } from "@/components/section";
+import { Hero } from "@/components/hero";
 
-// Step 2: the shell is real (grid, labels, nav, footer); the content inside
-// each section is still the plain Step 1 rendering. Steps 3–6 design each one.
+// The shell and hero are real; the content inside the remaining sections is
+// still the plain Step 1 rendering. Steps 4–6 design each one.
 export default function Home() {
   return (
     <>
-      {/* Hero placeholder — designed in Step 3. */}
-      <section className="surface-ink">
-        <div className="shell flex min-h-svh flex-col justify-center pt-24 pb-16">
-          <p className="label-mono text-muted-on-ink">{"// NOW SHIPPING"}</p>
-          <h1 className="mt-6 font-serif text-6xl leading-none tracking-tight md:text-8xl">
-            {site.name}
-          </h1>
-          <p className="mt-6 max-w-xl text-lg text-muted-on-ink md:text-xl">
-            {site.tagline}
-          </p>
-        </div>
-      </section>
+      <Hero />
 
       <Section id="work" label="02 Selected work">
         <ul className="space-y-3">

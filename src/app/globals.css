@@ -74,6 +74,23 @@ html {
   }
 }
 
+/* Hero name: each letter rises in, staggered by its index (--i). */
+@keyframes letter-rise {
+  from {
+    opacity: 0;
+    transform: translateY(0.35em);
+  }
+}
+.letter-rise {
+  animation: letter-rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  animation-delay: calc(var(--i) * 35ms + 100ms);
+}
+@media (prefers-reduced-motion: reduce) {
+  .letter-rise {
+    animation: none;
+  }
+}
+
 body {
   background: var(--paper);
   color: var(--ink);
