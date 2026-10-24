@@ -1,0 +1,55 @@
+{/* Facts (title, role, stack, links, TL;DR) live in src/data/projects.ts. This file is the write-up only. */}
+
+## The problem
+
+DevFest Lagos is one of the largest developer conferences in the country — 4,000+ attendees across multiple days. For the 2025 edition we decided to build our own ticketing platform instead of leaning on a generic tool, so the flow could match how the conference actually runs: different ticket types, spread across different days, all under one brand.
+
+I owned the frontend and its integration with the backend APIs — the landing page, and the part every attendee actually touched: choosing what to buy and who it was for.
+
+## What made it hard
+
+On paper, "sell some tickets" sounds trivial. The real requirement wasn't. One person could buy:
+
+- **several ticket types**,
+- across **several days**,
+- and — the part that changed everything — **for other people**, not just themselves.
+
+That last point is what turned a shopping cart into a real modelling problem. If I buy three tickets, they might be for three different people, and each of them needs to receive their *own* code at their *own* email address. A "quantity: 3" counter can't express that. Each ticket is its own thing, with its own owner.
+
+## How I built it
+
+I modelled the selection as an **array of individual ticket objects** in Redux, rather than a map of `type → quantity`. Each object carried everything one ticket needed to stand on its own:
+
+```ts
+{ type, day, recipientEmail }
+```
+
+Making the *ticket* the atomic unit — instead of a quantity — is what let the multi-recipient requirement fall out naturally. Three tickets meant three objects, each free to have a different type, a different day, and a different recipient. Redux held the whole selection as the single source of truth, so it survived across the steps of the flow and was exactly what checkout read from when it was time to pay.
+
+![The ticket-selection step: Standard and Pro ticket tabs above a multi-day November calendar, with a live order summary and a stepped Select Dates → Ticket Details → Buyer Information flow.](/images/work/devfest-ticket-selection.png)
+
+You can see both requirements in one screen: the **Standard / Pro** tabs are the ticket types, the **calendar** is the multi-day pick, and the **Select Dates → Ticket Details → Buyer Information** steps are where each ticket picks up its recipient. The order summary updates live off the same Redux selection.
+
+## The decision
+
+For the guest emails I went with an **enter-as-you-add** flow: the moment you add a ticket, you say who it's for.
+
+The alternative — let people pile up tickets and assign emails at the very end — front-loads a confusing empty cart and back-loads a wall of anonymous email fields. Enter-as-you-add keeps every ticket complete the instant it's created, so the buyer is never staring at a list of nameless tickets wondering which is which.
+
+The trade-off: it's slower for someone buying a lot of tickets at once (more on that below).
+
+A wrong email meant a real, paid ticket landing in the wrong inbox — so the selection couldn't advance to payment until every ticket had a valid recipient attached. Validating at the point of selection, rather than after checkout, kept a bad code from ever being issued.
+
+{/* TODO(moyo): drop in the nastiest concrete edge case you remember — e.g. the same email entered twice, a blank recipient, removing one ticket mid-flow, or someone buying 10 at once. One real example makes this beat land. */}
+
+## Impact
+
+The platform shipped and powered ticketing for the 2025 conference — it's live at the link above.
+
+{/* TODO(moyo): add the real launch-day number if you have it — "processed X tickets", "sold out in Y hours", etc. A concrete figure here is worth a paragraph of description. */}
+
+## What I'd do differently
+
+Enter-as-you-add is the right call for a handful of tickets, but a buyer bringing a whole team of ten still types ten emails one at a time. Given another pass, I'd add a bulk-assign step — paste or upload a list of emails and map them to tickets at once — without giving up the per-ticket model underneath, since that model is what made everything else possible.
+
+{/* TODO(moyo): replace or confirm — this is a read of your design, not your words. If there's something you'd actually change, it's stronger in your voice. */}
