@@ -10,8 +10,10 @@ export const navLinks = [
   { href: "/#work", label: "Work" },
   { href: "/#experience", label: "Experience" },
   { href: "/#changelog", label: "Changelog" },
+  { href: "/#process", label: "How I build" },
   { href: "/#notes", label: "Notes" },
-  { href: "/#contact", label: "Contact" },
+  // The footer's label is `// EXIT 0`, so Contact is numbered 00.
+  { href: "/#contact", label: "Contact", number: "00" },
 ];
 
 /**
@@ -118,7 +120,7 @@ export function SiteNav() {
           {navLinks.map((link, i) => (
             <li key={link.href} className="flex items-baseline gap-4 md:gap-6">
               <span className="label-mono w-6 text-muted-on-ink">
-                {String(i + 1).padStart(2, "0")}
+                {link.number ?? String(i + 1).padStart(2, "0")}
               </span>
               <Link
                 ref={i === 0 ? firstLinkRef : undefined}
