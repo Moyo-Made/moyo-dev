@@ -4,62 +4,82 @@ import { jobs, community } from "@/data/experience";
 import { notes } from "@/data/notes";
 import { changelog } from "@/data/changelog";
 import { featuredProjects, alsoBuilt } from "@/lib/projects";
+import { Section } from "@/components/section";
 
-// Step 1 placeholder: every section of the home page, rendered straight from
-// the data files with no styling. Step 2 onwards replaces this section by
-// section with the real design.
+// Step 2: the shell is real (grid, labels, nav, footer); the content inside
+// each section is still the plain Step 1 rendering. Steps 3–6 design each one.
 export default function Home() {
   return (
-    <main>
-      <h1>{site.name}</h1>
-      <p>{site.tagline}</p>
+    <>
+      {/* Hero placeholder — designed in Step 3. */}
+      <section className="surface-ink">
+        <div className="shell flex min-h-svh flex-col justify-center pt-24 pb-16">
+          <p className="label-mono text-muted-on-ink">{"// NOW SHIPPING"}</p>
+          <h1 className="mt-6 font-serif text-6xl leading-none tracking-tight md:text-8xl">
+            {site.name}
+          </h1>
+          <p className="mt-6 max-w-xl text-lg text-muted-on-ink md:text-xl">
+            {site.tagline}
+          </p>
+        </div>
+      </section>
 
-      <h2>{"// 02 Selected work"}</h2>
-      <ul>
-        {featuredProjects.map((p) => (
-          <li key={p.slug}>
-            <strong>
-              {p.caseStudy ? <Link href={`/work/${p.slug}`}>{p.title}</Link> : p.title}
-            </strong>{" "}
-            ({p.year}) — {p.outcome} [{p.stack.join(", ")}]
-          </li>
-        ))}
-      </ul>
-      <h3>Also built</h3>
-      <ul>
-        {alsoBuilt.map((p) => (
-          <li key={p.slug}>
-            {p.title} — {p.outcome}
-          </li>
-        ))}
-      </ul>
+      <Section id="work" label="02 Selected work">
+        <ul className="space-y-3">
+          {featuredProjects.map((p) => (
+            <li key={p.slug}>
+              <strong>
+                {p.caseStudy ? (
+                  <Link href={`/work/${p.slug}`} className="underline">
+                    {p.title}
+                  </Link>
+                ) : (
+                  p.title
+                )}
+              </strong>{" "}
+              ({p.year}) — {p.outcome}
+            </li>
+          ))}
+        </ul>
+        <h3 className="label-mono mt-10 text-muted">Also built</h3>
+        <ul className="mt-3 space-y-2">
+          {alsoBuilt.map((p) => (
+            <li key={p.slug}>
+              {p.title} — {p.outcome}
+            </li>
+          ))}
+        </ul>
+      </Section>
 
-      <h2>{"// 03 Experience"}</h2>
-      <ul>
-        {[...jobs, ...community].map((r) => (
-          <li key={`${r.org}-${r.role}`}>
-            {r.period} · {r.role} @ {r.org} — {r.impact}
-          </li>
-        ))}
-      </ul>
+      <Section id="experience" label="03 Experience">
+        <ul className="space-y-3">
+          {[...jobs, ...community].map((r) => (
+            <li key={`${r.org}-${r.role}`}>
+              {r.period} · {r.role} @ {r.org} — {r.impact}
+            </li>
+          ))}
+        </ul>
+      </Section>
 
-      <h2>{"// 04 Changelog"}</h2>
-      <ul>
-        {changelog.map((c) => (
-          <li key={`${c.month}-${c.name}`}>
-            {c.month} {c.action} {c.name} {c.note && `— ${c.note}`}
-          </li>
-        ))}
-      </ul>
+      <Section id="changelog" label="04 Changelog">
+        <ul className="space-y-1 font-mono text-sm">
+          {changelog.map((c) => (
+            <li key={`${c.month}-${c.name}`}>
+              {c.month} {c.action} {c.name} {c.note && `— ${c.note}`}
+            </li>
+          ))}
+        </ul>
+      </Section>
 
-      <h2>{"// 06 Notes"}</h2>
-      <ul>
-        {notes.map((n) => (
-          <li key={n.href}>
-            {n.date} · <a href={n.href}>{n.title}</a> ({n.platform})
-          </li>
-        ))}
-      </ul>
-    </main>
+      <Section id="notes" label="06 Notes">
+        <ul className="space-y-2">
+          {notes.map((n) => (
+            <li key={n.href}>
+              {n.date} · <a href={n.href} className="underline">{n.title}</a> ({n.platform})
+            </li>
+          ))}
+        </ul>
+      </Section>
+    </>
   );
 }

@@ -4,6 +4,12 @@ import { caseStudySlugs, getProject } from "@/lib/projects";
 
 // With Cache Components on, `dynamicParams` is gone: unknown slugs are
 // handled by the notFound() below instead.
+//
+// Every real case study is prerendered by generateStaticParams, so navigating
+// to one is already instant. Only unknown slugs would block, and those should
+// block — streaming them would turn a real 404 into a 200.
+export const instant = false;
+
 export function generateStaticParams() {
   return caseStudySlugs.map((slug) => ({ slug }));
 }
@@ -27,8 +33,8 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
   const { default: Body } = await import(`@/content/work/${slug}.mdx`);
 
   return (
-    <article>
-      <h1>{project.title}</h1>
+    <article className="shell pt-32 pb-20">
+      <h1 className="font-serif text-5xl">{project.title}</h1>
       <p>{project.summary}</p>
       <dl>
         <dt>Role</dt>
