@@ -9,6 +9,7 @@ import {
   nextCaseStudy,
 } from "@/lib/projects";
 import { caseStudyComponents } from "@/components/case-study-mdx";
+import { site } from "@/data/site";
 
 // With Cache Components on, `dynamicParams` is gone: unknown slugs are
 // handled by the notFound() below instead.
@@ -28,7 +29,22 @@ export async function generateMetadata({
   const { slug } = await params;
   const project = getProject(slug);
   if (!project) return {};
-  return { title: project.title, description: project.summary };
+  const url = `/work/${slug}`;
+  return {
+    title: project.title,
+    description: project.summary,
+    alternates: { canonical: url },
+    // Child openGraph replaces the parent's, so siteName is repeated here.
+    // The image comes from ./opengraph-image.tsx.
+    openGraph: {
+      type: "article",
+      siteName: site.name,
+      locale: "en_NG",
+      url,
+      title: project.title,
+      description: project.outcome,
+    },
+  };
 }
 
 /**

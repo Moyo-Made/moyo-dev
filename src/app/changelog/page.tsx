@@ -6,6 +6,7 @@ import { ChangelogList } from "@/components/changelog-list";
 export const metadata: Metadata = {
   title: "Changelog",
   description: "Everything I've shipped, built or started — newest first.",
+  alternates: { canonical: "/changelog" },
 };
 
 /** The full archive, grouped by year. */

@@ -10,7 +10,6 @@ export const site = {
     "Frontend & full-stack engineer building interactive tools that explain complex systems.",
   location: "Lagos, Nigeria",
   timeZone: "Africa/Lagos",
-  url: "https://moyo-dev.vercel.app", // TODO: swap for the real domain at launch
   email: "adegbitemoyomade2004@gmail.com",
   /** Shown in the hero status bar. Flip off when you're not looking. */
   availableForRoles: true,
