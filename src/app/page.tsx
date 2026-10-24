@@ -5,13 +5,15 @@ import { changelog } from "@/data/changelog";
 import { featuredProjects, alsoBuilt } from "@/lib/projects";
 import { Section } from "@/components/section";
 import { Hero } from "@/components/hero";
+import { ReadmeSection } from "@/components/readme-section";
 
-// The shell and hero are real; the content inside the remaining sections is
-// still the plain Step 1 rendering. Steps 4–6 design each one.
+// Shell, hero and README are real; the content inside the remaining sections
+// is still the plain Step 1 rendering. Steps 5–6 design each one.
 export default function Home() {
   return (
     <>
       <Hero />
+      <ReadmeSection />
 
       <Section id="work" label="02 Selected work">
         <ul className="space-y-3">

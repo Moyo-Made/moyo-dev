@@ -91,6 +91,17 @@ html {
   }
 }
 
+/* README preview card: a quick fade-and-settle in. */
+@keyframes reveal-in {
+  from {
+    opacity: 0;
+    scale: 0.96;
+  }
+}
+.reveal-card {
+  animation: reveal-in 0.18s ease-out;
+}
+
 body {
   background: var(--paper);
   color: var(--ink);

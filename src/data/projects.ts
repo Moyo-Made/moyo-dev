@@ -77,6 +77,10 @@ export const projects: Project[] = [
       code: "https://github.com/Moyo-Made/california-housing-intelligence",
     },
     tier: "featured",
+    image: {
+      src: "/images/work/california-housing.jpg",
+      alt: "California Housing Intelligence — a $213,000 prediction for a synthetic block group, with the model's average error shown underneath",
+    },
     tldr: {
       problem: "ML demos hide how a model behaves and where it breaks.",
       built:
@@ -100,6 +104,10 @@ export const projects: Project[] = [
       code: "https://github.com/Moyo-Made/how-nigeria-works",
     },
     tier: "featured",
+    image: {
+      src: "/images/work/how-nigeria-works.jpg",
+      alt: "Three Arms — a 3D model of the National Assembly on a plinth, with sourced key facts in the side panel",
+    },
     caseStudy: false, // TODO: write in Step 8
   },
   {
