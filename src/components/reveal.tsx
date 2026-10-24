@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { getProject } from "@/lib/projects";
+import { getProject, isExternal, projectHref } from "@/lib/projects";
 
 const CARD_W = 320;
 const GAP = 14;
@@ -73,10 +73,8 @@ export function Reveal({
 
   const hide = () => setPos(null);
 
-  const href = project.caseStudy
-    ? `/work/${project.slug}`
-    : (project.links.live ?? project.links.code ?? "/#work");
-  const external = !href.startsWith("/");
+  const href = projectHref(project) ?? "/#work";
+  const external = isExternal(href);
 
   const triggerProps = {
     ref: anchorRef,

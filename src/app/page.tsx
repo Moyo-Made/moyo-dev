@@ -1,46 +1,20 @@
-import Link from "next/link";
 import { jobs, community } from "@/data/experience";
 import { notes } from "@/data/notes";
 import { changelog } from "@/data/changelog";
-import { featuredProjects, alsoBuilt } from "@/lib/projects";
 import { Section } from "@/components/section";
 import { Hero } from "@/components/hero";
 import { ReadmeSection } from "@/components/readme-section";
+import { WorkSection } from "@/components/work-section";
 
-// Shell, hero and README are real; the content inside the remaining sections
-// is still the plain Step 1 rendering. Steps 5–6 design each one.
+// Hero, README and Selected work are designed; Experience, Changelog and
+// Notes are still the plain Step 1 rendering until Step 6.
 export default function Home() {
   return (
     <>
       <Hero />
       <ReadmeSection />
 
-      <Section id="work" label="02 Selected work">
-        <ul className="space-y-3">
-          {featuredProjects.map((p) => (
-            <li key={p.slug}>
-              <strong>
-                {p.caseStudy ? (
-                  <Link href={`/work/${p.slug}`} className="underline">
-                    {p.title}
-                  </Link>
-                ) : (
-                  p.title
-                )}
-              </strong>{" "}
-              ({p.year}) — {p.outcome}
-            </li>
-          ))}
-        </ul>
-        <h3 className="label-mono mt-10 text-muted">Also built</h3>
-        <ul className="mt-3 space-y-2">
-          {alsoBuilt.map((p) => (
-            <li key={p.slug}>
-              {p.title} — {p.outcome}
-            </li>
-          ))}
-        </ul>
-      </Section>
+      <WorkSection />
 
       <Section id="experience" label="03 Experience">
         <ul className="space-y-3">
