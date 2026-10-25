@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# promo film (motion/): dependencies and renders
+/motion/*/node_modules
+/motion/*/out

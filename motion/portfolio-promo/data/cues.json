@@ -1,0 +1,116 @@
+[
+ {
+  "t": 0.95,
+  "type": "tick",
+  "gain": 0.8,
+  "why": "highlighter lands on complicated?"
+ },
+ {
+  "t": 2.0,
+  "type": "whoosh",
+  "gain": 0.7,
+  "why": "highlighter flies to the hero badge"
+ },
+ {
+  "t": 2.45,
+  "type": "pop",
+  "gain": 0.6,
+  "why": "it lands on Available for roles"
+ },
+ {
+  "t": 4.0,
+  "type": "whoosh",
+  "gain": 0.6,
+  "why": "push into the Social Shake screenshot"
+ },
+ {
+  "t": 6.0,
+  "type": "tick",
+  "gain": 0.6,
+  "why": "wipe to Gixel"
+ },
+ {
+  "t": 8.0,
+  "type": "tick",
+  "gain": 0.6,
+  "why": "wipe to DevFest"
+ },
+ {
+  "t": 10.55,
+  "type": "tick",
+  "gain": 0.35,
+  "why": "count 82 to 96"
+ },
+ {
+  "t": 10.67,
+  "type": "tick",
+  "gain": 0.35,
+  "why": "count"
+ },
+ {
+  "t": 10.79,
+  "type": "tick",
+  "gain": 0.35,
+  "why": "count"
+ },
+ {
+  "t": 10.91,
+  "type": "tick",
+  "gain": 0.35,
+  "why": "count"
+ },
+ {
+  "t": 11.05,
+  "type": "chime",
+  "gain": 0.55,
+  "why": "highlighter marks 96%"
+ },
+ {
+  "t": 11.6,
+  "type": "whoosh",
+  "gain": 0.55,
+  "why": "highlighter flies into the nav"
+ },
+ {
+  "t": 12.5,
+  "type": "click",
+  "gain": 0.8,
+  "why": "click 04 How I build"
+ },
+ {
+  "t": 13.0,
+  "type": "click",
+  "gain": 0.8,
+  "why": "click 03 Experience"
+ },
+ {
+  "t": 14.5,
+  "type": "click",
+  "gain": 0.9,
+  "why": "click the theme toggle"
+ },
+ {
+  "t": 14.6,
+  "type": "whoosh",
+  "gain": 0.8,
+  "why": "paper turns to blueprint"
+ },
+ {
+  "t": 16.0,
+  "type": "thump",
+  "gain": 0.7,
+  "why": "the plate becomes the M mark"
+ },
+ {
+  "t": 16.5,
+  "type": "pop",
+  "gain": 0.5,
+  "why": "the yellow dot"
+ },
+ {
+  "t": 17.0,
+  "type": "chime",
+  "gain": 0.6,
+  "why": "moyomade.dev"
+ }
+]

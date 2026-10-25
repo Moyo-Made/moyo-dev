@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // The promo film's renderer, a separate Node project.
+    "motion/**",
   ]),
 ]);
 

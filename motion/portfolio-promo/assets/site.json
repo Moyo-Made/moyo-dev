@@ -1,0 +1,116 @@
+{
+ "url": "http://localhost:3100",
+ "viewport": {
+  "width": 1440,
+  "height": 900
+ },
+ "scale": 2,
+ "hero": {
+  "badge": {
+   "x": 152,
+   "y": 211.40625,
+   "w": 194.171875,
+   "h": 24
+  },
+  "proof": {
+   "x": 745,
+   "y": 222.40625,
+   "w": 530,
+   "h": 331.25
+  },
+  "toggle": {
+   "x": 1220,
+   "y": 8,
+   "w": 32,
+   "h": 32
+  }
+ },
+ "nav": {
+  "header": {
+   "w": 1440,
+   "h": 49
+  },
+  "items": [
+   {
+    "label": "01README",
+    "x": 340.859375,
+    "y": 10,
+    "w": 91.125,
+    "h": 28
+   },
+   {
+    "label": "02Selected work",
+    "x": 435.984375,
+    "y": 10,
+    "w": 151.609375,
+    "h": 28
+   },
+   {
+    "label": "03Experience",
+    "x": 591.59375,
+    "y": 10,
+    "w": 125.6875,
+    "h": 28
+   },
+   {
+    "label": "04How I build",
+    "x": 721.28125,
+    "y": 10,
+    "w": 134.328125,
+    "h": 28
+   },
+   {
+    "label": "05Writing",
+    "x": 859.609375,
+    "y": 10,
+    "w": 99.765625,
+    "h": 28
+   },
+   {
+    "label": "06Contact",
+    "x": 963.375,
+    "y": 10,
+    "w": 99.765625,
+    "h": 28
+   }
+  ],
+  "toggle": {
+   "x": 1220,
+   "y": 8,
+   "w": 32,
+   "h": 32
+  }
+ },
+ "plates": [
+  {
+   "file": "assets/screens/plate_0.png",
+   "title": "Social Shake — UGC Marketplace",
+   "w": 1136,
+   "h": 461.65625
+  },
+  {
+   "file": "assets/screens/plate_1.png",
+   "title": "Gixel — AI Fashion Campaigns",
+   "w": 1136,
+   "h": 461.65625
+  },
+  {
+   "file": "assets/screens/plate_2.png",
+   "title": "Atelier — Luxury Storefront",
+   "w": 1136,
+   "h": 461.65625
+  },
+  {
+   "file": "assets/screens/plate_3.png",
+   "title": "Three Arms — How Nigeria Works",
+   "w": 1136,
+   "h": 461.65625
+  },
+  {
+   "file": "assets/screens/plate_4.png",
+   "title": "DevFest Lagos 2025 — Ticketing",
+   "w": 1136,
+   "h": 445.65625
+  }
+ ]
+}

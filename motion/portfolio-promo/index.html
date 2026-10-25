@@ -1,0 +1,54 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>film</title>
+<style>
+  /* The portfolio's own fonts, copied from its node_modules. */
+  @font-face { font-family: "Plex Condensed"; font-weight: 500; src: url(assets/fonts/ibm-plex-sans-condensed-latin-500-normal.woff2) format("woff2"); }
+  @font-face { font-family: "Plex Condensed"; font-weight: 600; src: url(assets/fonts/ibm-plex-sans-condensed-latin-600-normal.woff2) format("woff2"); }
+  @font-face { font-family: "Geist Mono"; font-weight: 400; src: url(assets/fonts/GeistMono-Regular.woff2) format("woff2"); }
+  @font-face { font-family: "Geist Mono"; font-weight: 500; src: url(assets/fonts/GeistMono-Medium.woff2) format("woff2"); }
+  html, body { margin: 0; background: #111; overflow: hidden; }
+  canvas { display: block; }
+  body.preview { display: grid; place-items: center; height: 100vh; }
+  body.preview canvas { max-height: 96vh; max-width: 96vw; width: auto; height: auto; }
+</style>
+<canvas id="c"></canvas>
+<script type="module">
+import * as film from './film.js';
+import { layout, setReducedMotion } from './lib/motion.js';
+
+const q = new URLSearchParams(location.search);
+const W = Number(q.get('w')) || film.META.w || 1080;
+const H = Number(q.get('h')) || film.META.h || 1920;
+setReducedMotion(q.get('rm') === '1');
+
+const canvas = document.getElementById('c');
+canvas.width = W; canvas.height = H;
+const g = canvas.getContext('2d');
+const L = layout(W, H);
+
+const data = {};
+for (const name of ['vo', 'beats', 'cues']) {
+  try { const r = await fetch(`./data/${name}.json`); if (r.ok) data[name] = await r.json(); } catch {}
+}
+if (film.init) await film.init({ data, L });
+await document.fonts.ready;
+
+function draw(t) {
+  g.setTransform(1, 0, 0, 1, 0, 0); g.globalAlpha = 1;
+  g.fillStyle = film.META.bg; g.fillRect(0, 0, W, H);
+  if (film.under) film.under(g, t, L, data);
+  for (const s of film.TIMELINE) if (t >= s.from && t < s.to) { g.save(); s.draw(g, t - s.from, L, data, t); g.restore(); }
+  if (film.over) film.over(g, t, L, data);
+}
+
+window.FILM = { dur: film.META.dur, fps: film.META.fps || 30, w: W, h: H, scenes: film.TIMELINE.map(({ id, from, to, teaches }) => ({ id, from, to, teaches })) };
+window.seek = (t) => { draw(t); return true; };
+window.READY = true;
+
+if (!navigator.webdriver) {
+  document.body.classList.add('preview');
+  const t0 = performance.now();
+  (function loop() { draw(((performance.now() - t0) / 1000) % film.META.dur); requestAnimationFrame(loop); })();
+}
+</script>

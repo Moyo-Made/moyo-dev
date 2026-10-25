@@ -1,0 +1,2 @@
+# The promo film is a separate Node project; the site never imports it.
+motion/
