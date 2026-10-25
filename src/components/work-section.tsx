@@ -7,12 +7,11 @@ import {
   isExternal,
   projectHref,
 } from "@/lib/projects";
-import { figNumber } from "@/data/figures";
 import { Section } from "@/components/section";
 
 /**
- * `FIG. 02 — SELECTED WORK`: each case study as a plate — the screenshot in
- * crop marks with its figure caption, and a spec table beside it. Plates
+ * `02 — SELECTED WORK`: each case study as a plate — the screenshot in crop
+ * marks with its caption, and a spec table beside it. Plates
  * alternate sides on wide screens. Smaller projects follow as a table.
  */
 export function WorkSection() {
@@ -29,13 +28,7 @@ export function WorkSection() {
         ))}
       </ol>
 
-      <h3 className="label-mono mt-28">
-        <span className="text-annot">Table {figNumber("work")}.1</span>
-        <span aria-hidden className="text-muted">
-          {" — "}
-        </span>
-        Also built
-      </h3>
+      <h3 className="label-mono mt-28">Also built</h3>
       <div
         aria-hidden
         className="label-mono mt-6 hidden grid-cols-[3.5rem_1fr_11rem_1rem] gap-x-4 border-b-2 border-ink pb-2 text-muted md:grid"
@@ -85,8 +78,6 @@ function Plate({
   flip: boolean;
 }) {
   const href = projectHref(project);
-  const fig = `Fig. ${figNumber("work")}.${index}`;
-
   const specs = [
     { term: "Role", detail: project.role },
     { term: "Year", detail: String(project.year) },
@@ -122,7 +113,7 @@ function Plate({
             </span>
           </SmartLink>
           <figcaption className="label-mono mt-3 px-3 text-muted">
-            <span className="text-annot">{fig}</span> — {project.image.alt}
+            {project.image.alt}
           </figcaption>
         </figure>
       )}

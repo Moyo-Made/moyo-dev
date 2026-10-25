@@ -1,7 +1,7 @@
 import { buildSteps } from "@/data/process";
 
 /**
- * `FIG. 05 — HOW I BUILD` as an actual flow diagram: one box per step,
+ * `05 — HOW I BUILD` as an actual flow diagram: one box per step,
  * joined by arrows (left to right on wide screens, top to bottom on small
  * ones), each with its annotation leadered underneath. Static markup, so it
  * reads the same without JavaScript; connectors draw in on scroll where the

@@ -1,6 +1,5 @@
 import { site } from "@/data/site";
-import { figures } from "@/data/figures";
-import { FigureHeader } from "@/components/section";
+import { SectionHeader } from "@/components/section";
 import { LagosClock } from "@/components/lagos-clock";
 
 const links = [
@@ -10,7 +9,7 @@ const links = [
 ];
 
 /**
- * `FIG. 07 — CONTACT`: one question, then the sheet's title block — the
+ * `07 — CONTACT`: one question, then the sheet's title block — the
  * boxed corner of an engineering drawing that says who drew it, where, and
  * how to reach them.
  */
@@ -21,7 +20,7 @@ export function SiteFooter() {
   return (
     <footer id="contact" aria-labelledby="contact-label" className="bg-grid">
       <div className="shell pt-20 pb-10 md:pt-28">
-        <FigureHeader
+        <SectionHeader
           id="contact"
           caption={
             site.availableForRoles ? "Open to frontend & full-stack roles" : undefined
@@ -99,16 +98,11 @@ export function SiteFooter() {
               </a>
             </dd>
           </div>
-          <div className={cell}>
-            <dt className={term}>Scale</dt>
-            <dd className="mt-2">1 : 1</dd>
-          </div>
-          <div className={cell}>
-            <dt className={term}>Sheet</dt>
-            <dd className="mt-2 flex items-baseline justify-between gap-2">
-              {figures.length} figures
-              <a href="#top" className="label-mono hover:text-annot">
-                Top ↑
+          <div className={`${cell} col-span-2`}>
+            <dt className={term}>Page</dt>
+            <dd className="mt-2">
+              <a href="#top" className="hover:text-annot">
+                Back to top <span className="text-annot">↑</span>
               </a>
             </dd>
           </div>

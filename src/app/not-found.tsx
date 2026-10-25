@@ -1,13 +1,13 @@
 import Link from "next/link";
 import { MissingPath } from "@/components/missing-path";
 
-/** 404 as a missing figure, with the terminal error the build-log theme expects. */
+/** 404 as a terminal error — the build-log theme's version of a lost page. */
 export default function NotFound() {
   return (
     <section className="bg-grid">
       <div className="shell flex min-h-svh flex-col justify-center pt-32 pb-16">
         <p className="label-mono border-t-2 border-ink pt-3">
-          <span className="text-annot">Fig. 404</span>
+          <span className="text-annot">404</span>
           <span aria-hidden className="text-muted">
             {" — "}
           </span>

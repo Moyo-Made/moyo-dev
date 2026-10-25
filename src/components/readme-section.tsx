@@ -3,7 +3,7 @@ import { Section } from "@/components/section";
 import { Reveal } from "@/components/reveal";
 
 /**
- * `FIG. 01 — README`: the bio, with the work referenced inside it. Copy lives
+ * `01 — README`: the bio, with the work referenced inside it. Copy lives
  * in readme.mdx; the right padding is the margin the sidenotes float into,
  * and flow-root keeps them inside the section.
  */

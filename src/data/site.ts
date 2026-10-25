@@ -7,9 +7,14 @@ export const site = {
   shortName: "Moyo",
   /** The hero headline. Keep it to a job title. */
   role: "Frontend developer",
-  /** What you do, in one sentence. Sits under the role in the hero. */
+  /** The problem you solve, in one sentence. Sits under the role in the hero. */
   tagline:
-    "I build interactive tools that make complex systems easier to understand.",
+    "I turn complicated flows into fast, accessible interfaces people get on the first try.",
+  /** The evidence for the tagline, linked from the hero: "Most recently: …". */
+  proof: {
+    text: "ticketing for 4,000+ DevFest Lagos attendees",
+    href: "/work/devfest-lagos-2025-ticketing",
+  },
   location: "Lagos, Nigeria",
   timeZone: "Africa/Lagos",
   email: "adegbitemoyomade2004@gmail.com",

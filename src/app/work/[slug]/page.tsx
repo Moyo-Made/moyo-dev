@@ -49,7 +49,7 @@ export async function generateMetadata({
 
 /**
  * The case-study template, drawn as its own sheet: a grid-paper title block,
- * the screenshot as Fig. 1 in crop marks, a spec table beside the TL;DR and
+ * the screenshot in crop marks, a spec table beside the TL;DR and
  * the write-up, then the next case study. Every fact comes from
  * src/data/projects.ts; the MDX is the write-up only.
  */
@@ -112,7 +112,7 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
             />
           </div>
           <figcaption className="label-mono mt-3 px-3 text-muted">
-            <span className="text-annot">Fig. 1</span> — {project.image.alt}
+            {project.image.alt}
           </figcaption>
         </figure>
       )}

@@ -1,19 +1,12 @@
 import { community, jobs, type Role } from "@/data/experience";
-import { figNumber } from "@/data/figures";
 import { Section } from "@/components/section";
 
-/** `FIG. 03 — EXPERIENCE`: dates, role, impact, tags. Built for a 30-second scan. */
+/** `03 — EXPERIENCE`: dates, role, impact, tags. Built for a 30-second scan. */
 export function ExperienceSection() {
   return (
     <Section id="experience" caption={`${jobs.length} roles · ${community.length} community`}>
       <RoleTable roles={jobs} />
-      <h3 className="label-mono mt-20">
-        <span className="text-annot">Table {figNumber("experience")}.1</span>
-        <span aria-hidden className="text-muted">
-          {" — "}
-        </span>
-        Community
-      </h3>
+      <h3 className="label-mono mt-20">Community</h3>
       <RoleTable roles={community} compact />
     </Section>
   );

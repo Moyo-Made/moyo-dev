@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { changelog } from "@/data/changelog";
 import { ChangelogList } from "@/components/changelog-list";
-import { figNumber } from "@/data/figures";
 
 export const metadata: Metadata = {
   title: "Changelog",
@@ -22,10 +21,6 @@ export default function ChangelogPage() {
             ← Home
           </Link>
           <p className="label-mono mt-12 border-t-2 border-ink pt-3">
-            <span className="text-annot">Fig. {figNumber("changelog")}</span>
-            <span aria-hidden className="text-muted">
-              {" — "}
-            </span>
             Full changelog
           </p>
           <h1 className="mt-6 font-display text-[clamp(2.5rem,6.4vw,5.5rem)] leading-[0.95] font-semibold tracking-[-0.02em]">

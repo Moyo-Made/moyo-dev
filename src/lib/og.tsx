@@ -48,7 +48,7 @@ async function loadFonts() {
  */
 export const ogFonts = await loadFonts();
 
-/** `FIG. 00 — TITLE` in Geist Mono, as on every figure on the site. */
+/** `CASE STUDY 01 — 2025` in Geist Mono, as on the site's section labels. */
 export function OgLabel({ fig, children }: { fig: string; children: string }) {
   return (
     <div

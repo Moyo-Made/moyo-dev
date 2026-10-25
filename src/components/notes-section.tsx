@@ -7,7 +7,7 @@ const date = new Intl.DateTimeFormat("en-GB", {
   timeZone: "UTC",
 });
 
-/** `FIG. 06 — NOTES`: technical writing, as a table. Titles and dates do the work. */
+/** `06 — NOTES`: technical writing, as a table. Titles and dates do the work. */
 export function NotesSection() {
   return (
     <Section id="notes" caption={`${notes.length} posts`}>

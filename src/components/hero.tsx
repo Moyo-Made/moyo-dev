@@ -1,12 +1,13 @@
+import Link from "next/link";
 import { site } from "@/data/site";
 import { getLastShipped } from "@/lib/github";
 import { LagosClock } from "@/components/lagos-clock";
 import { RelativeTime } from "@/components/relative-time";
 
 /**
- * `FIG. 00 — SYSTEM OVERVIEW`: the ten-second answer to who, what, and
- * where's the proof. Name, then the role as the headline, then one line on
- * what the work is. Three numbered callouts (where, last shipped,
+ * The ten-second answer to who, what, and where's the proof. Name, then the
+ * role as the headline, then the problem solved with a link to the evidence.
+ * Three numbered callouts (where, last shipped,
  * availability) are leadered off it like annotations on a drawing; on small
  * screens they stack underneath.
  */
@@ -62,14 +63,6 @@ export async function Hero() {
   return (
     <section aria-labelledby="hero-name" className="bg-grid border-b border-line">
       <div className="shell flex min-h-svh flex-col pt-32 pb-10 lg:pt-24">
-        <p className="label-mono settle">
-          <span className="text-annot">Fig. 00</span>
-          <span aria-hidden className="text-muted">
-            {" — "}
-          </span>
-          System overview
-        </p>
-
         <div className="grid flex-1 content-center gap-x-6 gap-y-14 py-14 lg:grid-cols-12">
           <div className="lg:col-span-7">
             <h1 id="hero-name" className="settle">
@@ -82,7 +75,14 @@ export async function Hero() {
               className="settle mt-6 max-w-xl text-xl leading-snug text-pretty text-muted md:text-2xl"
               style={{ "--d": "120ms" } as React.CSSProperties}
             >
-              {site.tagline}
+              {site.tagline} Most recently:{" "}
+              <Link
+                href={site.proof.href}
+                className="text-ink underline decoration-annot underline-offset-4 hover:text-annot"
+              >
+                {site.proof.text}
+              </Link>
+              .
             </p>
 
             <div

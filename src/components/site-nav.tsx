@@ -4,20 +4,20 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { site } from "@/data/site";
-import { figures } from "@/data/figures";
+import { sections } from "@/data/sections";
 import { ThemeToggle } from "@/components/theme-toggle";
 
 /**
- * The sheet's title bar: name on the left, an index of every figure, theme
- * and email on the right. On the home page the figure being read is
+ * The title bar: name on the left, a numbered index of every section, theme
+ * and email on the right. On the home page the section being read is
  * highlighted. Below lg the index drops to a scrolling strip under the bar,
  * so every section stays one tap away without a menu to open.
  */
 export function SiteNav() {
-  const current = useCurrentFigure();
+  const current = useCurrentSection();
   const stripRef = useRef<HTMLElement>(null);
 
-  // Keep the highlighted figure in view in the mobile strip. Scrolls only
+  // Keep the highlighted section in view in the mobile strip. Scrolls only
   // the strip, never the page.
   useEffect(() => {
     const strip = stripRef.current;
@@ -31,7 +31,7 @@ export function SiteNav() {
 
   const index = (
     <ol className="flex items-center gap-1">
-      {figures.map((f, i) => {
+      {sections.map((f, i) => {
         const active = current === f.id;
         return (
           <li key={f.id} className="shrink-0">
@@ -64,7 +64,7 @@ export function SiteNav() {
           {site.name}
         </Link>
 
-        <nav aria-label="Figures" className="hidden lg:block">
+        <nav aria-label="Sections" className="hidden lg:block">
           {index}
         </nav>
 
@@ -92,7 +92,7 @@ export function SiteNav() {
 
       <nav
         ref={stripRef}
-        aria-label="Figures"
+        aria-label="Sections"
         className="relative overflow-x-auto border-t border-line [scrollbar-width:none] lg:hidden"
       >
         <div className="shell py-1">{index}</div>
@@ -102,10 +102,10 @@ export function SiteNav() {
 }
 
 /**
- * The figure crossing the upper third of the screen, on the home page only.
+ * The section crossing the upper third of the screen, on the home page only.
  * Null elsewhere, and before the first scroll event lands.
  */
-function useCurrentFigure() {
+function useCurrentSection() {
   const pathname = usePathname();
   const [current, setCurrent] = useState<string | null>(null);
 
@@ -118,7 +118,7 @@ function useCurrentFigure() {
       // A thin band a third of the way down the viewport.
       { rootMargin: "-33% 0px -66% 0px" },
     );
-    for (const f of figures) {
+    for (const f of sections) {
       const el = document.getElementById(f.id);
       if (el) observer.observe(el);
     }

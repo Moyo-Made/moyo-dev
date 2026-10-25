@@ -6,7 +6,7 @@ export const alt = `${site.name}, ${site.role} — ${site.tagline}`;
 export const size = ogSize;
 export const contentType = "image/png";
 
-/** The share card for the home page: the overview figure, as an image. */
+/** The share card for the home page: the hero, as an image. */
 export default async function Image() {
   return new ImageResponse(
     (
@@ -23,22 +23,10 @@ export default async function Image() {
         }}
       >
         <div style={{ display: "flex", flexDirection: "column" }}>
-          <OgLabel fig="Fig. 00">System overview</OgLabel>
+          <OgLabel fig={site.name}>Portfolio</OgLabel>
           <div
             style={{
               marginTop: 40,
-              fontFamily: "Geist Mono",
-              fontSize: 22,
-              letterSpacing: "0.12em",
-              textTransform: "uppercase",
-              color: ogColors.muted,
-            }}
-          >
-            {site.name}
-          </div>
-          <div
-            style={{
-              marginTop: 14,
               fontFamily: "IBM Plex Sans Condensed",
               fontSize: 120,
               lineHeight: 0.92,

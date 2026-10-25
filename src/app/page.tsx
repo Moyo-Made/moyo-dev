@@ -13,8 +13,8 @@ export const metadata: Metadata = {
   alternates: { canonical: "/" },
 };
 
-// The home page: the overview (Fig. 00), then six figures; the contact
-// title block (Fig. 07) is the footer, in the layout.
+// The home page: the hero, then six numbered sections; the contact title
+// block (07) is the footer, in the layout.
 export default function Home() {
   return (
     <>

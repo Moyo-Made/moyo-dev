@@ -5,7 +5,7 @@ import { ChangelogList } from "@/components/changelog-list";
 
 const SHOWN = 8;
 
-/** `FIG. 04 — CHANGELOG`: the latest entries; the rest live on /changelog. */
+/** `04 — CHANGELOG`: the latest entries; the rest live on /changelog. */
 export function ChangelogSection() {
   return (
     <Section id="changelog" caption={`Latest ${SHOWN} of ${changelog.length}`}>
