@@ -65,6 +65,48 @@ export const projects: Project[] = [
     caseStudy: true,
   },
   {
+    slug: "atelier",
+    title: "Atelier — Luxury Storefront",
+    outcome:
+      "A luxury fashion store that looks the part, with real checkout, accounts and an admin behind it.",
+    summary:
+      "A luxury e-commerce storefront: catalogue, search, bag, Stripe checkout and customer accounts, plus an admin for products, stock and orders. Built solo on Next.js with Drizzle over Neon Postgres and Better Auth.",
+    role: "Solo — UI and full stack",
+    year: 2026,
+    stack: ["Next.js", "TypeScript", "Drizzle", "Neon Postgres", "Stripe", "Better Auth"],
+    links: {
+      live: "https://atelierrstore.vercel.app",
+      code: "https://github.com/Moyo-Made/atelier-store",
+    },
+    tier: "featured",
+    image: {
+      src: "/images/work/atelier-storefront.jpg",
+      alt: "Atelier's homepage: an autumn collection campaign under a spaced serif wordmark",
+    },
+    caseStudy: false,
+  },
+  {
+    slug: "how-nigeria-works",
+    title: "Three Arms — How Nigeria Works",
+    outcome:
+      "A 3D explainer of Nigeria's government where every constitutional claim cites its section.",
+    summary:
+      "An interactive 3D explainer of Nigeria's federal government — the three arms, the three tiers, and how a bill becomes law. Each institution is a landmark you can orbit and take apart; unverified facts are marked as such, never guessed.",
+    role: "Solo — design, 3D and content",
+    year: 2026,
+    stack: ["React", "Three.js", "React Three Fiber", "Vite"],
+    links: {
+      live: "https://nggovt.vercel.app",
+      code: "https://github.com/Moyo-Made/how-nigeria-works",
+    },
+    tier: "featured",
+    image: {
+      src: "/images/work/how-nigeria-works.jpg",
+      alt: "Three Arms — a 3D model of the National Assembly on a plinth, with sourced key facts in the side panel",
+    },
+    caseStudy: false, // TODO: write in Step 8
+  },
+  {
     slug: "devfest-lagos-2025-ticketing",
     title: "DevFest Lagos 2025 — Ticketing",
     outcome:
@@ -118,27 +160,6 @@ export const projects: Project[] = [
     caseStudy: false, // TODO: write in Step 8
   },
   {
-    slug: "how-nigeria-works",
-    title: "Three Arms — How Nigeria Works",
-    outcome:
-      "A 3D explainer of Nigeria's government where every constitutional claim cites its section.",
-    summary:
-      "An interactive 3D explainer of Nigeria's federal government — the three arms, the three tiers, and how a bill becomes law. Each institution is a landmark you can orbit and take apart; unverified facts are marked as such, never guessed.",
-    role: "Solo — design, 3D and content",
-    year: 2026,
-    stack: ["React", "Three.js", "React Three Fiber", "Vite"],
-    links: {
-      live: "https://nggovt.vercel.app",
-      code: "https://github.com/Moyo-Made/how-nigeria-works",
-    },
-    tier: "featured",
-    image: {
-      src: "/images/work/how-nigeria-works.jpg",
-      alt: "Three Arms — a 3D model of the National Assembly on a plinth, with sourced key facts in the side panel",
-    },
-    caseStudy: false, // TODO: write in Step 8
-  },
-  {
     slug: "careerfit",
     title: "CareerFit — AI Career Recommender",
     outcome: "Top-3 accuracy of 94% across 24 careers.",
@@ -157,23 +178,6 @@ export const projects: Project[] = [
       alt: "CareerFit home page — “Discover the career path that fits who you are”",
     },
     caseStudy: false, // TODO: port from the general site in Step 8
-  },
-  {
-    slug: "atelier",
-    title: "Atelier — Luxury Storefront",
-    outcome:
-      "A full fashion store: catalogue, search, bag, Stripe checkout, accounts, and an admin for products, stock and orders.",
-    summary:
-      "A luxury e-commerce storefront with its own admin. Built solo on Next.js with Drizzle over Neon Postgres, Better Auth for accounts, and Stripe for checkout.",
-    role: "Solo — full stack",
-    year: 2026,
-    stack: ["Next.js", "TypeScript", "Drizzle", "Neon Postgres", "Stripe", "Better Auth"],
-    links: {
-      live: "https://atelierrstore.vercel.app",
-      code: "https://github.com/Moyo-Made/atelier-store",
-    },
-    tier: "also",
-    caseStudy: false,
   },
   {
     slug: "internconnect",
