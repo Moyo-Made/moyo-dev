@@ -165,7 +165,7 @@ export const projects: Project[] = [
       "A full fashion store: catalogue, search, bag, Stripe checkout, accounts, and an admin for products, stock and orders.",
     summary:
       "A luxury e-commerce storefront with its own admin. Built solo on Next.js with Drizzle over Neon Postgres, Better Auth for accounts, and Stripe for checkout.",
-    role: "Solo — design and full stack",
+    role: "Solo — full stack",
     year: 2026,
     stack: ["Next.js", "TypeScript", "Drizzle", "Neon Postgres", "Stripe", "Better Auth"],
     links: {
