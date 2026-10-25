@@ -50,10 +50,17 @@ export const projects: Project[] = [
     links: { live: "https://app.social-shake.com" },
     tier: "featured",
     image: {
-      src: "/images/work/social-shake-brief-wizard.png",
-      alt: "Social Shake's project brief wizard, choosing between UGC, creator-posted and Spark Ads projects",
+      src: "/images/work/social-shake-brief-types.png",
+      alt: "Step one of the Social Shake brief: choosing between raw UGC, creator-posted UGC and Spark Ads",
     },
-    caseStudy: false,
+    tldr: {
+      problem:
+        "Brands and creators had to trust each other first: one pays up front, or the other films for free.",
+      built:
+        "A three-sided marketplace: a four-step brief, card holds charged only on approval, and Stripe Connect payouts.",
+      result: "Live for an Australian client, with 500+ creators on the platform.",
+    },
+    caseStudy: true,
   },
   {
     slug: "devfest-lagos-2025-ticketing",
