@@ -12,7 +12,9 @@ export type Tier =
   /** Large card in Selected work, with a full case study. */
   | "featured"
   /** Compact row under Selected work. */
-  | "also";
+  | "also"
+  /** Small card in the Machine learning block under Selected work. */
+  | "ml";
 
 export interface Project {
   slug: string;
@@ -102,7 +104,7 @@ export const projects: Project[] = [
       live: "https://california-housing-intelligence.vercel.app",
       code: "https://github.com/Moyo-Made/california-housing-intelligence",
     },
-    tier: "featured",
+    tier: "ml",
     image: {
       src: "/images/work/california-housing.jpg",
       alt: "California Housing Intelligence — a $213,000 prediction for a synthetic block group, with the model's average error shown underneath",
@@ -149,7 +151,7 @@ export const projects: Project[] = [
       live: "https://career-recommender-seven.vercel.app/",
       code: "https://github.com/Moyo-Made/career-recommender",
     },
-    tier: "featured",
+    tier: "ml",
     image: {
       src: "/images/work/careerfit-home.png",
       alt: "CareerFit home page — “Discover the career path that fits who you are”",

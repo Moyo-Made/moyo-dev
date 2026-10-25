@@ -4,6 +4,7 @@ import type { Project } from "@/data/projects";
 import {
   alsoBuilt,
   featuredProjects,
+  mlProjects,
   isExternal,
   projectHref,
 } from "@/lib/projects";
@@ -12,13 +13,15 @@ import { Section } from "@/components/section";
 /**
  * `02 — SELECTED WORK`: each case study as a plate — the screenshot in crop
  * marks with its caption, and a spec table beside it. Plates
- * alternate sides on wide screens. Smaller projects follow as a table.
+ * alternate sides on wide screens. Smaller projects follow as a table, then
+ * the machine-learning work as small cards — range, kept apart from the
+ * product work.
  */
 export function WorkSection() {
   return (
     <Section
       id="work"
-      caption={`${featuredProjects.length} featured · ${alsoBuilt.length} more`}
+      caption={`${featuredProjects.length} featured · ${alsoBuilt.length + mlProjects.length} more`}
     >
       <ol className="space-y-24 md:space-y-32">
         {featuredProjects.map((project, i) => (
@@ -45,6 +48,19 @@ export function WorkSection() {
           </li>
         ))}
       </ul>
+
+      {mlProjects.length > 0 && (
+        <>
+          <h3 className="label-mono mt-20">Machine learning</h3>
+          <ul className="mt-6 grid gap-6 md:grid-cols-2">
+            {mlProjects.map((project) => (
+              <li key={project.slug}>
+                <MlCard project={project} />
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
     </Section>
   );
 }
@@ -219,5 +235,46 @@ function AlsoBuiltRow({ project }: { project: Project }) {
     </SmartLink>
   ) : (
     <div className={grid}>{body}</div>
+  );
+}
+
+/** A small card for the machine-learning work: thumbnail, result, stack. */
+function MlCard({ project }: { project: Project }) {
+  const href = projectHref(project);
+  const body = (
+    <>
+      {project.image && (
+        <Image
+          src={project.image.src}
+          alt=""
+          width={320}
+          height={200}
+          sizes="8rem"
+          className="aspect-[16/10] w-32 shrink-0 border border-line object-cover object-top"
+        />
+      )}
+      <span className="min-w-0">
+        <span className="font-display text-xl leading-tight font-semibold">
+          {project.title}
+          {href && <span className="ml-1.5 text-annot">↗</span>}
+        </span>
+        <span className="mt-1 block leading-snug text-muted">{project.outcome}</span>
+        <span className="label-mono mt-3 block text-muted">
+          {project.stack.slice(0, 3).join(" · ")}
+        </span>
+      </span>
+    </>
+  );
+  const card = "ticks flex h-full gap-4 p-4";
+
+  return href ? (
+    <SmartLink
+      href={href}
+      className={`${card} transition-colors hover:bg-paper-2 hover:[--tick:var(--annot)]`}
+    >
+      {body}
+    </SmartLink>
+  ) : (
+    <div className={card}>{body}</div>
   );
 }

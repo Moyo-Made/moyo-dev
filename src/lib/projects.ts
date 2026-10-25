@@ -2,6 +2,7 @@ import { projects, type Project } from "@/data/projects";
 
 export const featuredProjects = projects.filter((p) => p.tier === "featured");
 export const alsoBuilt = projects.filter((p) => p.tier === "also");
+export const mlProjects = projects.filter((p) => p.tier === "ml");
 
 export function getProject(slug: string): Project | undefined {
   return projects.find((p) => p.slug === slug);
