@@ -10,15 +10,23 @@ export const site = {
   /** The problem you solve, in one sentence. Sits under the role in the hero. */
   tagline:
     "I turn complicated flows into fast, accessible interfaces people get on the first try.",
-  /** The evidence for the tagline, linked from the hero: "Most recently: …". */
+  /**
+   * The evidence for the tagline. The hero links `text` ("Most recently: …")
+   * and shows the project's screenshot with `notes` as callouts beside its
+   * stack. `project` must be a slug in src/data/projects.ts.
+   */
   proof: {
+    project: "devfest-lagos-2025-ticketing",
     text: "ticketing for 4,000+ DevFest Lagos attendees",
-    href: "/work/devfest-lagos-2025-ticketing",
+    notes: [
+      { term: "Role", detail: "Owned the frontend and its API integration" },
+      { term: "Hard part", detail: "One buyer, many tickets, each with its own recipient" },
+    ],
   },
   location: "Lagos, Nigeria",
   timeZone: "Africa/Lagos",
   email: "adegbitemoyomade2004@gmail.com",
-  /** Shown in the hero status bar. Flip off when you're not looking. */
+  /** The tag above your name in the hero. Flip off when you're not looking. */
   availableForRoles: true,
   socials: {
     github: "https://github.com/Moyo-Made",
