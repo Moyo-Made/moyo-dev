@@ -17,7 +17,7 @@ export const jobs: Role[] = [
     role: "Frontend Developer",
     org: "DevFest Lagos",
     impact:
-      "Built the 2024 and 2025 event platforms for 4,000+ attendees. Raised accessibility from 82% to 96% (WCAG 2.1 AA) and cut page rollout time by 25% with a shared component library.",
+      "Frontend engineer on the team behind the 2024 and 2025 event platforms for 4,000+ attendees. Helped raise accessibility from 82% to 96% (WCAG 2.1 AA) and cut page rollout time by 25% with a shared component library.",
     tags: ["Next.js", "TypeScript", "Redux", "Accessibility"],
   },
   {

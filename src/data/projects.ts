@@ -70,8 +70,8 @@ export const projects: Project[] = [
     outcome:
       "Ticketing for one of Nigeria's largest developer conferences — 4,000+ attendees.",
     summary:
-      "Built the frontend and ticket-selection system for DevFest Lagos 2025. The hard part wasn't selling tickets; it was letting one person buy several ticket types, across several days, for several different people — each with their own code.",
-    role: "Frontend engineer — owned the frontend and its API integration",
+      "As a frontend engineer on the DevFest Lagos team, I worked on the 2025 ticketing platform and its ticket-selection flow. The hard part wasn't selling tickets; it was letting one person buy several ticket types, across several days, for several different people — each with their own code.",
+    role: "Frontend engineer on the DevFest Lagos team",
     year: 2025,
     stack: ["Next.js", "TypeScript", "Redux"],
     links: { live: "https://tickets.devfestlagos.com/" },
