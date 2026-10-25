@@ -65,6 +65,32 @@ export const projects: Project[] = [
     caseStudy: true,
   },
   {
+    slug: "gixel",
+    title: "Gixel — AI Fashion Campaigns",
+    outcome:
+      "Turns one product photo into a whole fashion campaign: studio, on-model, lifestyle and detail shots.",
+    summary:
+      "Gixel lets fashion brands upload a product photo or link and get back a ready-to-post campaign. As lead web engineer I built the web app and the system behind it: generation jobs queued to a separate worker, credits and refunds that always add up, Stripe billing, and a project store shared with the iOS app.",
+    role: "Lead web engineer — web app and backend",
+    team: "Small team; the iOS app is built separately",
+    year: 2026,
+    stack: ["Next.js", "TypeScript", "Firebase", "Cloud Run", "Cloud Tasks", "Stripe"],
+    links: { live: "https://gixel.net" },
+    tier: "featured",
+    image: {
+      src: "/images/work/gixel-one-photo-campaign.jpg",
+      alt: "Gixel: one photo of a red dress in, four campaign shots out (studio, lifestyle, detail and packaging)",
+    },
+    tldr: {
+      problem:
+        "Every product needs a campaign's worth of images, and a photoshoot per product doesn't scale.",
+      built:
+        "The web app and its pipeline: queued generation jobs, a signed worker on Cloud Run, credits, refunds and billing.",
+      result: "Live at gixel.net, sharing one project store with the iOS app.",
+    },
+    caseStudy: true,
+  },
+  {
     slug: "atelier",
     title: "Atelier — Luxury Storefront",
     outcome:
