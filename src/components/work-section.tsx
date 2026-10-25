@@ -18,7 +18,7 @@ export function WorkSection() {
   return (
     <Section
       id="work"
-      caption={`${featuredProjects.length} case studies · ${alsoBuilt.length} more`}
+      caption={`${featuredProjects.length} featured · ${alsoBuilt.length} more`}
     >
       <ol className="space-y-24 md:space-y-32">
         {featuredProjects.map((project, i) => (

@@ -16,11 +16,11 @@ export const site = {
    * stack. `project` must be a slug in src/data/projects.ts.
    */
   proof: {
-    project: "devfest-lagos-2025-ticketing",
-    text: "ticketing for 4,000+ DevFest Lagos attendees",
+    project: "social-shake",
+    text: "a UGC marketplace with 500+ creators, built end to end",
     notes: [
-      { term: "Role", detail: "Owned the frontend and its API integration" },
-      { term: "Hard part", detail: "One buyer, many tickets, each with its own recipient" },
+      { term: "Role", detail: "Sole developer, freelance, for an Australian client" },
+      { term: "Hard part", detail: "Three user types, escrow payments and live chat" },
     ],
   },
   location: "Lagos, Nigeria",

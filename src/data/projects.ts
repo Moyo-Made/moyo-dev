@@ -37,6 +37,25 @@ export interface Project {
 
 export const projects: Project[] = [
   {
+    slug: "social-shake",
+    title: "Social Shake — UGC Marketplace",
+    outcome:
+      "A marketplace where brands brief, hire and pay 500+ creators for short-form video.",
+    summary:
+      "Built end to end as a freelancer for an Australian client. Brands write a brief in a four-step wizard, invite or open it to creators, and pay only for approved videos; creators apply, deliver and get paid out; admins approve both sides. Brands, creators and admins each get their own dashboard.",
+    role: "Sole developer, end to end — freelance",
+    team: "Solo, for an Australian client",
+    year: 2025,
+    stack: ["Next.js", "TypeScript", "Firebase", "Stripe Connect", "Socket.io"],
+    links: { live: "https://app.social-shake.com" },
+    tier: "featured",
+    image: {
+      src: "/images/work/social-shake-brief-wizard.png",
+      alt: "Social Shake's project brief wizard, choosing between UGC, creator-posted and Spark Ads projects",
+    },
+    caseStudy: false,
+  },
+  {
     slug: "devfest-lagos-2025-ticketing",
     title: "DevFest Lagos 2025 — Ticketing",
     outcome:

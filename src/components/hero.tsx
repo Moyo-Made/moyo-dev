@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { site } from "@/data/site";
-import { getProject, projectHref } from "@/lib/projects";
+import { getProject, isExternal, projectHref } from "@/lib/projects";
 
 /**
  * The ten-second answer to who, what, and where's the proof. On the left:
@@ -13,6 +13,8 @@ export function Hero() {
   const project = getProject(site.proof.project);
   if (!project) throw new Error(`site.proof has no project "${site.proof.project}"`);
   const href = projectHref(project) ?? "/#work";
+  // Without a case study the proof links to the live product, in a new tab.
+  const external = isExternal(href) && { target: "_blank", rel: "noreferrer" };
 
   const notes = [
     ...site.proof.notes,
@@ -44,6 +46,7 @@ export function Hero() {
             {site.tagline} Most recently:{" "}
             <Link
               href={href}
+              {...external}
               className="text-ink underline decoration-annot underline-offset-4 hover:text-annot"
             >
               {site.proof.text}
@@ -79,7 +82,8 @@ export function Hero() {
           >
             <Link
               href={href}
-              aria-label={`${project.title} — case study`}
+              {...external}
+              aria-label={project.caseStudy ? `${project.title} — case study` : project.title}
               className="ticks block p-3 group-hover:[--tick:var(--annot)]"
             >
               <span className="block overflow-hidden border border-line bg-paper-2">
