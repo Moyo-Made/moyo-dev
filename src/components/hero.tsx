@@ -5,7 +5,7 @@ import { getProject, isExternal, projectHref } from "@/lib/projects";
 
 /**
  * The ten-second answer to who, what, and where's the proof. On the left:
- * availability, name and city, the role as the headline, then the problem
+ * availability, name, the role as the headline, then the problem
  * solved. On the right, the proof itself — the latest case study's
  * screenshot in crop marks, with numbered callouts leadered up to it.
  */
@@ -32,9 +32,7 @@ export function Hero() {
             </p>
           )}
           <h1 id="hero-name" className="settle mt-6">
-            <span className="label-mono block text-muted">
-              {site.name} · {site.location.split(",")[0]}
-            </span>
+            <span className="label-mono block text-muted">{site.name}</span>
             <span className="mt-4 block font-display text-[clamp(3.25rem,7.5vw,6.5rem)] leading-[0.9] font-semibold tracking-[-0.025em] text-balance">
               {site.role}
             </span>

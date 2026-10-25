@@ -19,7 +19,7 @@ export function Section({
     <section id={id} aria-labelledby={`${id}-label`}>
       <div className="shell py-20 md:py-28">
         <SectionHeader id={id} caption={caption} />
-        <div className="mt-10 md:mt-14">{children}</div>
+        <div className="settle-on-view mt-10 md:mt-14">{children}</div>
       </div>
     </section>
   );
@@ -33,7 +33,7 @@ export function SectionHeader({
   caption?: string;
 }) {
   return (
-    <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 border-t-2 border-ink pt-3">
+    <div className="settle-on-view flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 border-t-2 border-ink pt-3">
       <h2 id={`${id}-label`} className="label-mono">
         <span className="text-annot">{sectionNumber(id)}</span>
         <span aria-hidden className="text-muted">

@@ -249,8 +249,8 @@ function MlCard({ project }: { project: Project }) {
           alt=""
           width={320}
           height={200}
-          sizes="8rem"
-          className="aspect-[16/10] w-32 shrink-0 border border-line object-cover object-top"
+          sizes="(min-width: 640px) 8rem, 5rem"
+          className="aspect-[16/10] w-20 shrink-0 self-start border border-line object-cover object-top sm:w-32"
         />
       )}
       <span className="min-w-0">
@@ -265,7 +265,8 @@ function MlCard({ project }: { project: Project }) {
       </span>
     </>
   );
-  const card = "ticks flex h-full gap-4 p-4";
+  // Below 320px there's no room beside the thumbnail, so it goes on top.
+  const card = "ticks flex h-full flex-col gap-4 p-4 min-[20rem]:flex-row";
 
   return href ? (
     <SmartLink
