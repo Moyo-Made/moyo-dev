@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { changelog } from "@/data/changelog";
 import { ChangelogList } from "@/components/changelog-list";
+import { figNumber } from "@/data/figures";
 
 export const metadata: Metadata = {
   title: "Changelog",
@@ -15,19 +16,22 @@ export default function ChangelogPage() {
 
   return (
     <>
-      <header className="surface-ink">
-        <div className="shell pt-36 pb-16 md:pb-24">
-          <Link
-            href="/#changelog"
-            className="label-mono text-muted-on-ink hover:text-paper"
-          >
+      <header className="bg-grid border-b border-line">
+        <div className="shell pt-32 pb-14 md:pb-20 lg:pt-24">
+          <Link href="/#changelog" className="label-mono text-muted hover:text-annot">
             ← Home
           </Link>
-          <p className="label-mono mt-12 text-muted-on-ink">{"// CHANGELOG"}</p>
-          <h1 className="mt-5 font-serif text-[clamp(2.75rem,7vw,6rem)] leading-[0.95] tracking-tight">
+          <p className="label-mono mt-12 border-t-2 border-ink pt-3">
+            <span className="text-annot">Fig. {figNumber("changelog")}</span>
+            <span aria-hidden className="text-muted">
+              {" — "}
+            </span>
+            Full changelog
+          </p>
+          <h1 className="mt-6 font-display text-[clamp(2.5rem,6.4vw,5.5rem)] leading-[0.95] font-semibold tracking-[-0.02em]">
             Everything shipped
           </h1>
-          <p className="mt-8 max-w-2xl text-xl text-muted-on-ink md:text-2xl">
+          <p className="mt-8 max-w-2xl text-xl text-muted md:text-2xl">
             {changelog.length} entries, newest first. Shipped means it&rsquo;s
             live; built means the code is public; started means it&rsquo;s in
             progress.
@@ -43,7 +47,7 @@ export default function ChangelogPage() {
         >
           <h2
             id={`y${year}`}
-            className="font-serif text-4xl md:sticky md:top-28 md:col-span-3 md:self-start"
+            className="font-display text-4xl font-semibold tracking-tight md:sticky md:top-20 md:col-span-3 md:self-start"
           >
             {year}
           </h2>

@@ -4,8 +4,7 @@ import { siteUrl } from "@/lib/site-url";
 
 /**
  * Person + WebSite structured data, so search engines know who the site is
- * about — oyin.design does the same. `<` is escaped so no string in the data
- * can close the script tag.
+ * about. `<` is escaped so no string in the data can close the script tag.
  */
 export function PersonJsonLd() {
   const person = {

@@ -48,9 +48,10 @@ export async function generateMetadata({
 }
 
 /**
- * The case-study template: ink header → screenshot straddling the seam →
- * a sticky facts column beside TL;DR and the write-up → next case study.
- * Every fact comes from src/data/projects.ts; the MDX is the write-up only.
+ * The case-study template, drawn as its own sheet: a grid-paper title block,
+ * the screenshot as Fig. 1 in crop marks, a spec table beside the TL;DR and
+ * the write-up, then the next case study. Every fact comes from
+ * src/data/projects.ts; the MDX is the write-up only.
  */
 export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
   const { slug } = await params;
@@ -68,32 +69,37 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
     { term: "Stack", detail: project.stack.join(", ") },
   ].filter(Boolean) as { term: string; detail: string }[];
 
+  const link =
+    "underline decoration-annot underline-offset-4 hover:text-annot";
+
   return (
     <article>
-      <header className="surface-ink">
-        <div className="shell pt-36 pb-16 md:pb-24">
-          <Link
-            href="/#work"
-            className="label-mono text-muted-on-ink hover:text-paper"
-          >
+      <header className="bg-grid border-b border-line">
+        <div className="shell pt-32 pb-14 md:pb-20 lg:pt-24">
+          <Link href="/#work" className="label-mono text-muted hover:text-annot">
             ← All work
           </Link>
-          <p className="label-mono mt-12 text-muted-on-ink">
-            {`// CASE STUDY ${number > 0 ? String(number).padStart(2, "0") : ""}`}
+          <p className="label-mono mt-12 border-t-2 border-ink pt-3">
+            <span className="text-annot">
+              Case study{number > 0 ? ` ${String(number).padStart(2, "0")}` : ""}
+            </span>
+            <span aria-hidden className="text-muted">
+              {" — "}
+            </span>
+            {project.year}
           </p>
-          <h1 className="mt-5 max-w-5xl font-serif text-[clamp(2.75rem,7vw,6rem)] leading-[0.95] tracking-tight text-balance">
+          <h1 className="mt-6 max-w-5xl font-display text-[clamp(2.5rem,6.4vw,5.5rem)] leading-[0.95] font-semibold tracking-[-0.02em] text-balance">
             {project.title}
           </h1>
-          <p className="mt-8 max-w-3xl text-xl leading-snug text-muted-on-ink md:text-2xl">
+          <p className="mt-8 max-w-3xl text-xl leading-snug text-muted md:text-2xl">
             {project.summary}
           </p>
         </div>
       </header>
 
       {project.image && (
-        // Ink above the halfway line, paper below — the screenshot sits on the seam.
-        <div className="bg-[linear-gradient(var(--ink)_50%,var(--paper)_50%)]">
-          <div className="shell">
+        <figure className="shell pt-12 md:pt-16">
+          <div className="ticks p-3">
             <Image
               src={project.image.src}
               alt={project.image.alt}
@@ -101,24 +107,27 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
               height={1500}
               loading="eager"
               fetchPriority="high"
-              sizes="(min-width: 1200px) 1136px, 100vw"
-              className="aspect-[16/10] w-full border border-ink-2 object-cover object-top shadow-[0_32px_64px_-32px_rgb(15_15_13/0.5)]"
+              sizes="(min-width: 1200px) 1112px, 100vw"
+              className="aspect-[16/10] w-full border border-line object-cover object-top"
             />
           </div>
-        </div>
+          <figcaption className="label-mono mt-3 px-3 text-muted">
+            <span className="text-annot">Fig. 1</span> — {project.image.alt}
+          </figcaption>
+        </figure>
       )}
 
-      <div className="shell grid grid-cols-1 gap-x-6 gap-y-12 py-20 md:grid-cols-12 md:py-28">
-        <aside className="md:sticky md:top-28 md:col-span-3 md:self-start">
-          <dl className="space-y-5">
+      <div className="shell grid grid-cols-1 gap-x-6 gap-y-12 py-16 md:grid-cols-12 md:py-24">
+        <aside className="md:sticky md:top-20 md:col-span-4 md:self-start lg:col-span-3">
+          <dl className="border-t-2 border-ink">
             {facts.map((f) => (
-              <div key={f.term}>
+              <div key={f.term} className="border-b border-line py-3">
                 <dt className="label-mono text-muted">{f.term}</dt>
                 <dd className="mt-1 leading-snug">{f.detail}</dd>
               </div>
             ))}
             {(project.links.live || project.links.code) && (
-              <div>
+              <div className="border-b border-line py-3">
                 <dt className="label-mono text-muted">Links</dt>
                 <dd className="mt-1 flex flex-col gap-1">
                   {project.links.live && (
@@ -126,7 +135,7 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
                       href={project.links.live}
                       target="_blank"
                       rel="noreferrer"
-                      className="underline decoration-signal decoration-2 underline-offset-4 hover:text-muted"
+                      className={link}
                     >
                       Live site ↗
                     </a>
@@ -136,7 +145,7 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
                       href={project.links.code}
                       target="_blank"
                       rel="noreferrer"
-                      className="underline decoration-signal decoration-2 underline-offset-4 hover:text-muted"
+                      className={link}
                     >
                       Source code ↗
                     </a>
@@ -147,13 +156,10 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
           </dl>
         </aside>
 
-        <div className="md:col-span-8 md:col-start-5">
+        <div className="md:col-span-8 lg:col-start-5">
           {project.tldr && (
-            <section
-              aria-label="TL;DR"
-              className="border border-line bg-paper-2/60 p-6 md:p-8"
-            >
-              <p className="label-mono text-muted">{"// TL;DR"}</p>
+            <section aria-label="TL;DR" className="ticks bg-paper-2 p-6 md:p-8">
+              <p className="label-mono text-annot">TL;DR</p>
               <dl className="mt-5 grid gap-4 md:grid-cols-[6rem_1fr]">
                 {(
                   [
@@ -175,21 +181,18 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
             <Body components={caseStudyComponents} />
           </div>
 
-          <nav
-            aria-label="More work"
-            className="mt-24 border-t border-line pt-8"
-          >
+          <nav aria-label="More work" className="mt-24 border-t-2 border-ink pt-4">
             {next ? (
               <Link href={`/work/${next.slug}`} className="group block">
                 <span className="label-mono text-muted">Next case study</span>
-                <span className="mt-2 block font-serif text-4xl leading-tight group-hover:underline group-hover:decoration-signal group-hover:decoration-2 group-hover:underline-offset-8">
-                  {next.title} →
+                <span className="mt-3 block font-display text-4xl leading-tight font-semibold tracking-tight group-hover:underline group-hover:decoration-annot group-hover:decoration-2 group-hover:underline-offset-8">
+                  {next.title} <span className="text-annot">→</span>
                 </span>
               </Link>
             ) : (
               <Link
                 href="/#work"
-                className="label-mono underline decoration-signal decoration-2 underline-offset-8 hover:text-muted"
+                className="label-mono inline-block bg-ink px-4 py-3 text-paper transition-colors hover:bg-annot"
               >
                 See all work ↑
               </Link>

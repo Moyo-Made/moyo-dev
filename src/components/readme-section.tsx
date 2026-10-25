@@ -2,21 +2,17 @@ import Readme from "@/content/readme.mdx";
 import { Section } from "@/components/section";
 import { Reveal } from "@/components/reveal";
 
-/** `// 01 README` — the bio, with the work inside it. Copy lives in readme.mdx. */
+/**
+ * `FIG. 01 — README`: the bio, with the work referenced inside it. Copy lives
+ * in readme.mdx; the right padding is the margin the sidenotes float into,
+ * and flow-root keeps them inside the section.
+ */
 export function ReadmeSection() {
   return (
-    <Section id="readme" label="01 README">
-      <div className="space-y-6 text-2xl leading-[1.4] tracking-[-0.01em] text-pretty md:text-[1.875rem]">
+    <Section id="readme" caption="References marked [n]">
+      <div className="refs flow-root space-y-6 text-2xl leading-[1.4] tracking-[-0.01em] text-pretty md:text-[1.875rem] lg:pr-[19rem] xl:pr-[22rem]">
         <Readme components={{ Reveal }} />
       </div>
-      <p className="label-mono mt-10 text-muted">
-        <span className="hidden [@media(hover:hover)]:inline">
-          Hover the underlined words to preview the work
-        </span>
-        <span className="[@media(hover:hover)]:hidden">
-          Tap the underlined words to open the work
-        </span>
-      </p>
     </Section>
   );
 }

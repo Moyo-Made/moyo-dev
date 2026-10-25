@@ -1,38 +1,47 @@
+import { figNumber, figTitle, type FigureId } from "@/data/figures";
+
 /**
- * The site-wide section grid, borrowed from oyin.design: a mono label in the
- * left column (sticky on desktop), content in the right. On mobile the label
- * stacks above the content.
+ * A figure on the sheet: a heavy rule with `FIG. 02 — SELECTED WORK` on the
+ * left and an optional caption on the right, then the content across the
+ * full width. Numbers and titles come from src/data/figures.ts.
  */
 export function Section({
   id,
-  label,
-  tone = "paper",
+  caption,
   children,
 }: {
-  id: string;
-  /** Without the slashes — "02 Selected work" renders as `// 02 SELECTED WORK`. */
-  label: string;
-  tone?: "paper" | "ink";
+  id: FigureId;
+  /** Right of the rule, e.g. "4 case studies · 6 more". */
+  caption?: string;
   children: React.ReactNode;
 }) {
-  const headingId = `${id}-label`;
   return (
-    <section
-      id={id}
-      aria-labelledby={headingId}
-      className={tone === "ink" ? "surface-ink" : undefined}
-    >
-      <div className="shell grid grid-cols-1 gap-x-6 gap-y-6 py-20 md:grid-cols-12 md:py-28">
-        <h2
-          id={headingId}
-          className={`label-mono md:col-span-3 md:sticky md:top-28 md:self-start ${
-            tone === "ink" ? "text-muted-on-ink" : "text-muted"
-          }`}
-        >
-          {`// ${label}`}
-        </h2>
-        <div className="md:col-span-8 md:col-start-4">{children}</div>
+    <section id={id} aria-labelledby={`${id}-label`}>
+      <div className="shell py-20 md:py-28">
+        <FigureHeader id={id} caption={caption} />
+        <div className="mt-10 md:mt-14">{children}</div>
       </div>
     </section>
+  );
+}
+
+export function FigureHeader({
+  id,
+  caption,
+}: {
+  id: FigureId;
+  caption?: string;
+}) {
+  return (
+    <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 border-t-2 border-ink pt-3">
+      <h2 id={`${id}-label`} className="label-mono">
+        <span className="text-annot">Fig. {figNumber(id)}</span>
+        <span aria-hidden className="text-muted">
+          {" — "}
+        </span>
+        {figTitle(id)}
+      </h2>
+      {caption && <p className="label-mono text-muted">{caption}</p>}
+    </div>
   );
 }

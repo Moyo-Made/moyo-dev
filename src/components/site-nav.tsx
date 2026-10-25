@@ -1,145 +1,132 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { site } from "@/data/site";
-import { LagosClock } from "@/components/lagos-clock";
-
-export const navLinks = [
-  { href: "/#readme", label: "README" },
-  { href: "/#work", label: "Work" },
-  { href: "/#experience", label: "Experience" },
-  { href: "/#changelog", label: "Changelog" },
-  { href: "/#process", label: "How I build" },
-  { href: "/#notes", label: "Notes" },
-  // The footer's label is `// EXIT 0`, so Contact is numbered 00.
-  { href: "/#contact", label: "Contact", number: "00" },
-];
+import { figures } from "@/data/figures";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 /**
- * Floating ink bar — email on the left, monogram in the middle, menu on the
- * right — over a full-screen ink menu, after oyin.design. Email is always one
- * click away.
- *
- * The menu is a disclosure, not a modal: while it's open the rest of the page
- * (#page) is made inert, so Tab moves only through the bar and the menu.
+ * The sheet's title bar: name on the left, an index of every figure, theme
+ * and email on the right. On the home page the figure being read is
+ * highlighted. Below lg the index drops to a scrolling strip under the bar,
+ * so every section stays one tap away without a menu to open.
  */
 export function SiteNav() {
-  const [open, setOpen] = useState(false);
-  const toggleRef = useRef<HTMLButtonElement>(null);
-  const firstLinkRef = useRef<HTMLAnchorElement>(null);
+  const current = useCurrentFigure();
+  const stripRef = useRef<HTMLElement>(null);
 
+  // Keep the highlighted figure in view in the mobile strip. Scrolls only
+  // the strip, never the page.
   useEffect(() => {
-    const page = document.getElementById("page");
-    if (!open) return;
+    const strip = stripRef.current;
+    const active = strip?.querySelector<HTMLElement>("[aria-current]");
+    if (!strip || !active) return;
+    strip.scrollTo({
+      left: active.offsetLeft - (strip.clientWidth - active.offsetWidth) / 2,
+      behavior: "smooth",
+    });
+  }, [current]);
 
-    if (page) page.inert = true;
-    document.documentElement.style.overflow = "hidden";
-    firstLinkRef.current?.focus();
-
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        setOpen(false);
-        toggleRef.current?.focus();
-      }
-    };
-    window.addEventListener("keydown", onKey);
-    return () => {
-      if (page) page.inert = false;
-      document.documentElement.style.overflow = "";
-      window.removeEventListener("keydown", onKey);
-    };
-  }, [open]);
+  const index = (
+    <ol className="flex items-center gap-1">
+      {figures.map((f, i) => {
+        const active = current === f.id;
+        return (
+          <li key={f.id} className="shrink-0">
+            <Link
+              href={`/#${f.id}`}
+              aria-current={active ? "location" : undefined}
+              className={`label-mono flex items-baseline gap-1.5 px-2 py-1.5 transition-colors ${
+                active ? "bg-mark text-on-mark" : "text-muted hover:text-ink"
+              }`}
+            >
+              <span className={active ? undefined : "text-annot"}>
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              {f.title}
+            </Link>
+          </li>
+        );
+      })}
+    </ol>
+  );
 
   return (
-    <header className="surface-ink">
-      <div className="fixed inset-x-4 top-4 z-50 mx-auto flex h-14 max-w-md items-center justify-between rounded-sm bg-ink px-4 text-paper shadow-[0_8px_24px_-12px_rgb(0_0_0/0.5)]">
-        <a
-          href={`mailto:${site.email}`}
-          aria-label={`Email ${site.shortName}`}
-          className="grid size-9 place-items-center rounded-sm hover:text-signal"
-        >
-          <svg
-            aria-hidden
-            viewBox="0 0 24 24"
-            className="size-5"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.5"
-          >
-            <rect x="3" y="5" width="18" height="14" rx="1.5" />
-            <path d="m3.5 6 8.5 7 8.5-7" />
-          </svg>
-        </a>
-
+    <header className="fixed inset-x-0 top-0 z-50 border-b border-line bg-paper/90 backdrop-blur-md">
+      <div className="shell flex h-12 items-center justify-between gap-6">
         <Link
           href="/"
-          onClick={() => setOpen(false)}
           aria-label={`${site.name} — home`}
-          className="font-serif text-2xl leading-none"
+          className="font-display text-lg leading-none font-semibold tracking-tight"
         >
-          M<span className="text-signal">/</span>
+          {site.name}
         </Link>
 
-        <button
-          ref={toggleRef}
-          type="button"
-          aria-expanded={open}
-          aria-controls="site-menu"
-          aria-label={open ? "Close menu" : "Open menu"}
-          onClick={() => setOpen((o) => !o)}
-          className="group grid size-9 place-items-center rounded-sm hover:text-signal"
-        >
-          <span aria-hidden className="relative block h-3 w-5">
-            <span
-              className={`absolute left-0 h-px w-5 bg-current transition-transform duration-300 ${
-                open ? "top-1.5 rotate-45" : "top-0.5"
-              }`}
-            />
-            <span
-              className={`absolute left-0 h-px w-5 bg-current transition-transform duration-300 ${
-                open ? "top-1.5 -rotate-45" : "top-2.5"
-              }`}
-            />
-          </span>
-        </button>
+        <nav aria-label="Figures" className="hidden lg:block">
+          {index}
+        </nav>
+
+        <div className="flex items-center gap-1">
+          <ThemeToggle />
+          <a
+            href={`mailto:${site.email}`}
+            aria-label={`Email ${site.shortName}`}
+            className="grid size-8 place-items-center hover:text-annot"
+          >
+            <svg
+              aria-hidden
+              viewBox="0 0 24 24"
+              className="size-5"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.25"
+            >
+              <rect x="3" y="5" width="18" height="14" />
+              <path d="m3.5 6 8.5 7 8.5-7" />
+            </svg>
+          </a>
+        </div>
       </div>
 
       <nav
-        id="site-menu"
-        aria-label="Site"
-        // Visibility flips instantly on open (so the first link can take
-        // focus straight away) and fades out with the opacity on close.
-        className={`fixed inset-0 z-40 flex flex-col bg-ink pt-28 duration-300 ${
-          open
-            ? "visible opacity-100 transition-opacity"
-            : "invisible opacity-0 transition-[opacity,visibility]"
-        }`}
+        ref={stripRef}
+        aria-label="Figures"
+        className="relative overflow-x-auto border-t border-line [scrollbar-width:none] lg:hidden"
       >
-        <ol className="shell flex-1">
-          {navLinks.map((link, i) => (
-            <li key={link.href} className="flex items-baseline gap-4 md:gap-6">
-              <span className="label-mono w-6 text-muted-on-ink">
-                {link.number ?? String(i + 1).padStart(2, "0")}
-              </span>
-              <Link
-                ref={i === 0 ? firstLinkRef : undefined}
-                href={link.href}
-                onClick={() => setOpen(false)}
-                className="font-serif text-5xl leading-[1.1] hover:text-signal md:text-7xl"
-              >
-                {link.label}
-              </Link>
-            </li>
-          ))}
-        </ol>
-        <div className="shell label-mono flex flex-wrap justify-between gap-4 border-t border-ink-2 py-6 text-muted-on-ink">
-          <a href={`mailto:${site.email}`} className="hover:text-paper">
-            {site.email}
-          </a>
-          <LagosClock />
-        </div>
+        <div className="shell py-1">{index}</div>
       </nav>
     </header>
   );
+}
+
+/**
+ * The figure crossing the upper third of the screen, on the home page only.
+ * Null elsewhere, and before the first scroll event lands.
+ */
+function useCurrentFigure() {
+  const pathname = usePathname();
+  const [current, setCurrent] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (pathname !== "/") return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) if (e.isIntersecting) setCurrent(e.target.id);
+      },
+      // A thin band a third of the way down the viewport.
+      { rootMargin: "-33% 0px -66% 0px" },
+    );
+    for (const f of figures) {
+      const el = document.getElementById(f.id);
+      if (el) observer.observe(el);
+    }
+    return () => {
+      observer.disconnect();
+      setCurrent(null);
+    };
+  }, [pathname]);
+
+  return current;
 }

@@ -9,12 +9,12 @@ import type { MDXComponents } from "mdx/types";
 export const caseStudyComponents: MDXComponents = {
   h2: (props) => (
     <h2
-      className="mt-20 font-serif text-3xl leading-tight first:mt-0 md:text-4xl"
+      className="mt-20 font-display text-3xl leading-tight font-semibold tracking-tight first:mt-0 md:text-4xl"
       {...props}
     />
   ),
   h3: (props) => (
-    <h3 className="mt-10 text-xl font-medium leading-snug" {...props} />
+    <h3 className="mt-10 font-display text-2xl leading-snug font-semibold" {...props} />
   ),
   p: (props) => (
     <p className="mt-5 max-w-[68ch] text-lg leading-relaxed" {...props} />
@@ -34,25 +34,25 @@ export const caseStudyComponents: MDXComponents = {
   strong: (props) => <strong className="font-semibold" {...props} />,
   a: (props) => (
     <a
-      className="underline decoration-muted/50 underline-offset-4 hover:decoration-signal hover:decoration-2"
+      className="underline decoration-annot underline-offset-4 hover:text-annot"
       {...props}
     />
   ),
   code: (props) => (
     <code
-      className="rounded-sm bg-paper-2 px-1.5 py-0.5 font-mono text-[0.88em]"
+      className="bg-paper-2 px-1.5 py-0.5 font-mono text-[0.88em]"
       {...props}
     />
   ),
   pre: (props) => (
     <pre
-      className="mt-6 overflow-x-auto rounded-sm bg-ink p-5 font-mono text-sm leading-relaxed text-paper [&_code]:bg-transparent [&_code]:p-0 [&_code]:text-[1em]"
+      className="mt-6 overflow-x-auto border border-line bg-paper-2 p-5 font-mono text-sm leading-relaxed [&_code]:bg-transparent [&_code]:p-0 [&_code]:text-[1em]"
       {...props}
     />
   ),
   blockquote: (props) => (
     <blockquote
-      className="mt-8 border-l-2 border-signal pl-6 font-serif text-2xl leading-snug [&_p]:mt-0 [&_p]:text-2xl"
+      className="mt-8 border-l-2 border-annot pl-6 font-display text-2xl leading-snug font-medium [&_p]:mt-0 [&_p]:text-2xl"
       {...props}
     />
   ),

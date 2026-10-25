@@ -5,7 +5,7 @@ import { ReadmeSection } from "@/components/readme-section";
 import { WorkSection } from "@/components/work-section";
 import { ExperienceSection } from "@/components/experience-section";
 import { ChangelogSection } from "@/components/changelog-section";
-import { ProcessSteps } from "@/components/process-steps";
+import { FlowDiagram } from "@/components/flow-diagram";
 import { NotesSection } from "@/components/notes-section";
 import { PersonJsonLd } from "@/components/json-ld";
 
@@ -13,7 +13,8 @@ export const metadata: Metadata = {
   alternates: { canonical: "/" },
 };
 
-// The home page: ink hero, six paper sections, ink footer (in the layout).
+// The home page: the overview (Fig. 00), then six figures; the contact
+// title block (Fig. 07) is the footer, in the layout.
 export default function Home() {
   return (
     <>
@@ -23,8 +24,8 @@ export default function Home() {
       <WorkSection />
       <ExperienceSection />
       <ChangelogSection />
-      <Section id="process" label="05 How I build">
-        <ProcessSteps />
+      <Section id="process" caption="4 steps · every project">
+        <FlowDiagram />
       </Section>
       <NotesSection />
     </>

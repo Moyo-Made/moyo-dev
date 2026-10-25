@@ -3,7 +3,7 @@ import { join } from "node:path";
 import { ImageResponse } from "next/og";
 import { site } from "@/data/site";
 import { caseStudySlugs, featuredProjects, getProject } from "@/lib/projects";
-import { OgFooter, OgLabel, ogColors, ogFonts, ogSize } from "@/lib/og";
+import { OgFooter, OgLabel, ogColors, ogFonts, ogGrid, ogSize } from "@/lib/og";
 
 export const size = ogSize;
 export const contentType = "image/png";
@@ -58,18 +58,18 @@ export default async function Image({
           width: "100%",
           height: "100%",
           padding: "64px 72px 52px",
-          background: ogColors.ink,
-          color: ogColors.paper,
+          ...ogGrid,
+          color: ogColors.ink,
         }}
       >
         <div style={{ display: "flex", gap: 48 }}>
           <div style={{ display: "flex", flexDirection: "column", flex: 1 }}>
-            <OgLabel>{`Case study ${String(number).padStart(2, "0")}`}</OgLabel>
+            <OgLabel fig={`Case study ${String(number).padStart(2, "0")}`}>{String(project.year)}</OgLabel>
             <div
               style={{
                 marginTop: 28,
-                fontFamily: "Instrument Serif",
-                fontSize: 84,
+                fontFamily: "IBM Plex Sans Condensed",
+                fontSize: 76,
                 lineHeight: 0.98,
                 letterSpacing: "-0.02em",
               }}
@@ -98,8 +98,7 @@ export default async function Image({
                 marginTop: 52,
                 objectFit: "cover",
                 objectPosition: "top",
-                border: `1px solid ${ogColors.ink2}`,
-                transform: "rotate(-2deg)",
+                border: `1px solid ${ogColors.line}`,
               }}
             />
           )}

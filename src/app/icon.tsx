@@ -6,14 +6,14 @@ export const size = { width: 64, height: 64 };
 export const contentType = "image/png";
 
 // Read at module load (build time), so the icon stays static.
-const serif = await readFile(
+const display = await readFile(
   join(
     process.cwd(),
-    "node_modules/@fontsource/instrument-serif/files/instrument-serif-latin-400-normal.woff",
+    "node_modules/@fontsource/ibm-plex-sans-condensed/files/ibm-plex-sans-condensed-latin-600-normal.woff",
   ),
 );
 
-/** Favicon: the nav's "M/" monogram — paper M, yellow slash, on ink. */
+/** Favicon: a condensed M on ink, with the highlighter-yellow status square. */
 export default async function Icon() {
   return new ImageResponse(
     (
@@ -24,17 +24,27 @@ export default async function Icon() {
           justifyContent: "center",
           width: "100%",
           height: "100%",
-          background: "#0f0f0d",
+          background: "#121418",
           borderRadius: 12,
-          fontFamily: "Instrument Serif",
-          fontSize: 50,
-          color: "#f3f0e8",
-          paddingBottom: 4,
+          fontFamily: "IBM Plex Sans Condensed",
+          fontSize: 46,
+          color: "#f5f6f3",
+          position: "relative",
         }}
       >
-        M<span style={{ color: "#f2b705" }}>/</span>
+        M
+        <div
+          style={{
+            position: "absolute",
+            right: 9,
+            bottom: 9,
+            width: 10,
+            height: 10,
+            background: "#f2b705",
+          }}
+        />
       </div>
     ),
-    { ...size, fonts: [{ name: "Instrument Serif", data: serif, weight: 400 }] },
+    { ...size, fonts: [{ name: "IBM Plex Sans Condensed", data: display, weight: 600 }] },
   );
 }

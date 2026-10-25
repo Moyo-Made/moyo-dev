@@ -7,11 +7,19 @@ const date = new Intl.DateTimeFormat("en-GB", {
   timeZone: "UTC",
 });
 
-/** `// 06 NOTES` — technical writing. Titles and dates do the work. */
+/** `FIG. 06 — NOTES`: technical writing, as a table. Titles and dates do the work. */
 export function NotesSection() {
   return (
-    <Section id="notes" label="06 Notes">
-      <ol className="border-t border-line">
+    <Section id="notes" caption={`${notes.length} posts`}>
+      <div
+        aria-hidden
+        className="label-mono hidden grid-cols-[7rem_1fr_auto] gap-x-6 border-b-2 border-ink pb-2 text-muted md:grid"
+      >
+        <span>Date</span>
+        <span>Title</span>
+        <span>Platform</span>
+      </div>
+      <ol className="border-t-2 border-ink md:border-t-0">
         {notes.map((n) => (
           <li key={n.href} className="border-b border-line">
             <a
@@ -20,14 +28,14 @@ export function NotesSection() {
               rel="noreferrer"
               className="group grid gap-x-6 gap-y-1 py-6 transition-colors hover:bg-paper-2 md:grid-cols-[7rem_1fr_auto]"
             >
-              <time dateTime={n.date} className="label-mono pt-1.5 text-muted">
+              <time dateTime={n.date} className="label-mono pt-2 text-muted">
                 {date.format(new Date(n.date))}
               </time>
-              <span className="font-serif text-2xl leading-snug text-pretty group-hover:underline group-hover:decoration-signal group-hover:decoration-2 group-hover:underline-offset-4">
+              <span className="font-display text-2xl leading-snug font-semibold tracking-tight text-pretty group-hover:underline group-hover:decoration-annot group-hover:decoration-2 group-hover:underline-offset-4">
                 {n.title}
               </span>
-              <span className="label-mono pt-1.5 text-muted">
-                {n.platform} ↗
+              <span className="label-mono pt-2 text-muted">
+                {n.platform} <span className="text-annot">↗</span>
               </span>
             </a>
           </li>

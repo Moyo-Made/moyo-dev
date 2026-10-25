@@ -2,12 +2,12 @@ import type { Action, ChangelogEntry } from "@/data/changelog";
 
 /**
  * The changelog as a git log: a rail down the left with one commit dot per
- * entry. The dot shows the kind of change — filled yellow for shipped, ink
- * for built, hollow for started — and the action is also written out, so
+ * entry. The dot shows the kind of change — highlighter yellow for shipped,
+ * ink for built, hollow for started — and the action is also written out, so
  * colour is never the only signal.
  */
 const dot: Record<Action, string> = {
-  shipped: "bg-signal border-ink",
+  shipped: "bg-mark border-ink",
   built: "bg-ink border-ink",
   started: "bg-paper border-ink",
 };
@@ -34,7 +34,7 @@ export function ChangelogList({ entries }: { entries: ChangelogEntry[] }) {
                 href={c.href}
                 target="_blank"
                 rel="noreferrer"
-                className="break-words underline decoration-line underline-offset-4 hover:decoration-signal hover:decoration-2"
+                className="break-words underline decoration-line underline-offset-4 hover:decoration-annot hover:decoration-2"
               >
                 {c.name}
               </a>

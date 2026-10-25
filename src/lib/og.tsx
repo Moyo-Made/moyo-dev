@@ -2,30 +2,40 @@ import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 
 /**
- * Shared pieces for the generated share images (opengraph-image.tsx files).
- * Satori can't read woff2, so this loads the woff/ttf builds of the site's
- * fonts straight from node_modules.
+ * Shared pieces for the generated share images (opengraph-image.tsx files),
+ * drawn like the site: drafting paper, ink, blue annotations. Satori can't
+ * read woff2, so this loads the woff/ttf builds of the site's fonts straight
+ * from node_modules.
  */
 export const ogSize = { width: 1200, height: 630 };
 
 export const ogColors = {
-  ink: "#0f0f0d",
-  ink2: "#1c1c19",
-  paper: "#f3f0e8",
-  muted: "#9c978b",
-  signal: "#f2b705",
+  paper: "#f5f6f3",
+  ink: "#121418",
+  line: "#d3d7dc",
+  grid: "rgba(18, 20, 24, 0.06)",
+  muted: "#586070",
+  annot: "#2443e6",
+  mark: "#f2b705",
+};
+
+/** The grid-paper background, as a style object. */
+export const ogGrid = {
+  backgroundColor: ogColors.paper,
+  backgroundImage: `linear-gradient(${ogColors.grid} 1px, transparent 1px), linear-gradient(90deg, ${ogColors.grid} 1px, transparent 1px)`,
+  backgroundSize: "24px 24px",
 };
 
 const font = (path: string) => readFile(join(process.cwd(), "node_modules", path));
 
 async function loadFonts() {
-  const [serif, sans, mono] = await Promise.all([
-    font("@fontsource/instrument-serif/files/instrument-serif-latin-400-normal.woff"),
+  const [display, sans, mono] = await Promise.all([
+    font("@fontsource/ibm-plex-sans-condensed/files/ibm-plex-sans-condensed-latin-600-normal.woff"),
     font("geist/dist/fonts/geist-sans/Geist-Regular.ttf"),
     font("geist/dist/fonts/geist-mono/GeistMono-Regular.ttf"),
   ]);
   return [
-    { name: "Instrument Serif", data: serif, weight: 400 as const, style: "normal" as const },
+    { name: "IBM Plex Sans Condensed", data: display, weight: 600 as const, style: "normal" as const },
     { name: "Geist", data: sans, weight: 400 as const, style: "normal" as const },
     { name: "Geist Mono", data: mono, weight: 400 as const, style: "normal" as const },
   ];
@@ -38,24 +48,29 @@ async function loadFonts() {
  */
 export const ogFonts = await loadFonts();
 
-/** `// LABEL` in Geist Mono, as used across the site. */
-export function OgLabel({ children }: { children: string }) {
+/** `FIG. 00 — TITLE` in Geist Mono, as on every figure on the site. */
+export function OgLabel({ fig, children }: { fig: string; children: string }) {
   return (
     <div
       style={{
+        display: "flex",
+        borderTop: `3px solid ${ogColors.ink}`,
+        paddingTop: 14,
         fontFamily: "Geist Mono",
         fontSize: 22,
         letterSpacing: "0.12em",
         textTransform: "uppercase",
-        color: ogColors.muted,
+        color: ogColors.ink,
       }}
     >
-      {`// ${children}`}
+      <span style={{ color: ogColors.annot }}>{fig}</span>
+      <span style={{ color: ogColors.muted }}>&nbsp;—&nbsp;</span>
+      <span>{children}</span>
     </div>
   );
 }
 
-/** The bottom status row: yellow dot, name, location. */
+/** The bottom row: a highlighted status on the left, location on the right. */
 export function OgFooter({ left }: { left: string }) {
   return (
     <div
@@ -63,8 +78,8 @@ export function OgFooter({ left }: { left: string }) {
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
-        borderTop: `1px solid ${ogColors.ink2}`,
-        paddingTop: 24,
+        borderTop: `1px solid ${ogColors.line}`,
+        paddingTop: 22,
         fontFamily: "Geist Mono",
         fontSize: 20,
         letterSpacing: "0.12em",
@@ -72,13 +87,10 @@ export function OgFooter({ left }: { left: string }) {
         color: ogColors.muted,
       }}
     >
-      <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-        <div
-          style={{ width: 12, height: 12, borderRadius: 12, background: ogColors.signal }}
-        />
-        <span style={{ color: ogColors.paper }}>{left}</span>
-      </div>
-      <span>Lagos, Nigeria</span>
+      <span style={{ background: ogColors.mark, color: ogColors.ink, padding: "2px 10px" }}>
+        {left}
+      </span>
+      <span>Lagos, Nigeria · 6.5244° N, 3.3792° E</span>
     </div>
   );
 }

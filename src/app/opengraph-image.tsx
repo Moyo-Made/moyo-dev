@@ -1,12 +1,12 @@
 import { ImageResponse } from "next/og";
 import { site } from "@/data/site";
-import { OgFooter, OgLabel, ogColors, ogFonts, ogSize } from "@/lib/og";
+import { OgFooter, OgLabel, ogColors, ogFonts, ogGrid, ogSize } from "@/lib/og";
 
 export const alt = `${site.name} — ${site.tagline}`;
 export const size = ogSize;
 export const contentType = "image/png";
 
-/** The share card for the home page: the hero, as an image. */
+/** The share card for the home page: the overview figure, as an image. */
 export default async function Image() {
   return new ImageResponse(
     (
@@ -18,31 +18,30 @@ export default async function Image() {
           width: "100%",
           height: "100%",
           padding: "72px 80px 56px",
-          background: ogColors.ink,
-          color: ogColors.paper,
+          ...ogGrid,
+          color: ogColors.ink,
         }}
       >
         <div style={{ display: "flex", flexDirection: "column" }}>
-          <OgLabel>Now shipping</OgLabel>
+          <OgLabel fig="Fig. 00">System overview</OgLabel>
           <div
             style={{
-              marginTop: 36,
-              fontFamily: "Instrument Serif",
-              fontSize: 128,
-              lineHeight: 0.95,
-              letterSpacing: "-0.02em",
+              marginTop: 40,
+              fontFamily: "IBM Plex Sans Condensed",
+              fontSize: 40,
+              letterSpacing: "-0.01em",
             }}
           >
             {site.name}
           </div>
           <div
             style={{
-              marginTop: 32,
-              maxWidth: 860,
-              fontFamily: "Geist",
-              fontSize: 34,
-              lineHeight: 1.3,
-              color: ogColors.muted,
+              marginTop: 18,
+              maxWidth: 980,
+              fontFamily: "IBM Plex Sans Condensed",
+              fontSize: 76,
+              lineHeight: 0.98,
+              letterSpacing: "-0.02em",
             }}
           >
             {site.tagline}

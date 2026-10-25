@@ -1,135 +1,147 @@
-import { Fragment } from "react";
 import { site } from "@/data/site";
+import { figures } from "@/data/figures";
 import { getLastShipped } from "@/lib/github";
 import { LagosClock } from "@/components/lagos-clock";
 import { RelativeTime } from "@/components/relative-time";
 
 /**
- * `// NOW SHIPPING` — the ten-second answer to who, what, and where's the
- * proof. After oyin.design's "Now showing" hero, with its bottom status row
- * turned into a build status bar.
+ * `FIG. 00 — SYSTEM OVERVIEW`: the ten-second answer to who, what, and
+ * where's the proof. The positioning line is the headline; three numbered
+ * callouts (where, last shipped, availability) are leadered off it like
+ * annotations on a drawing. On small screens they stack underneath.
  */
 export async function Hero() {
   const lastShipped = await getLastShipped();
   // The changelog fallback only knows the month.
   const isMonth = /^\d{4}-\d{2}$/.test(lastShipped.at);
 
-  return (
-    <section aria-labelledby="hero-name" className="surface-ink">
-      <div className="shell flex min-h-svh flex-col pt-28">
-        <div className="flex flex-1 flex-col justify-center py-12">
-          <p className="label-mono text-muted-on-ink">{"// NOW SHIPPING"}</p>
-
-          <h1
-            id="hero-name"
-            aria-label={site.name}
-            className="mt-6 font-serif text-[clamp(3.5rem,10vw,9rem)] leading-[0.92] tracking-tight"
+  const callouts = [
+    {
+      term: "Location",
+      detail: (
+        <>
+          {site.location}
+          <span className="label-mono mt-1 block text-muted">
+            <LagosClock /> WAT
+          </span>
+        </>
+      ),
+    },
+    {
+      term: "Last shipped",
+      detail: (
+        <>
+          <a
+            href={lastShipped.href}
+            target="_blank"
+            rel="noreferrer"
+            className="font-mono text-base break-all underline decoration-line underline-offset-4 hover:decoration-annot"
           >
-            <SplitLetters text={site.name} />
-          </h1>
+            {lastShipped.name}
+          </a>
+          <span className="label-mono mt-1 block text-muted">
+            {isMonth ? (
+              <time dateTime={lastShipped.at}>{lastShipped.at}</time>
+            ) : (
+              <RelativeTime iso={lastShipped.at} />
+            )}
+          </span>
+        </>
+      ),
+    },
+    {
+      term: "Status",
+      detail: site.availableForRoles ? (
+        <span className="bg-mark px-1.5 text-on-mark">Available for roles</span>
+      ) : (
+        "Heads-down building"
+      ),
+    },
+  ];
 
-          <p className="mt-8 max-w-2xl text-xl leading-snug text-muted-on-ink md:text-2xl">
-            {site.tagline}
-          </p>
+  return (
+    <section aria-labelledby="hero-name" className="bg-grid border-b border-line">
+      <div className="shell flex min-h-svh flex-col pt-32 pb-6 lg:pt-24">
+        <p className="label-mono settle">
+          <span className="text-annot">Fig. 00</span>
+          <span aria-hidden className="text-muted">
+            {" — "}
+          </span>
+          System overview
+        </p>
 
-          <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-4">
-            <a
-              href="#work"
-              className="label-mono inline-flex items-center gap-3 bg-signal px-5 py-4 text-ink transition-colors hover:bg-paper"
+        <div className="grid flex-1 content-center gap-x-6 gap-y-14 py-14 lg:grid-cols-12">
+          <div className="lg:col-span-7">
+            <h1
+              id="hero-name"
+              className="settle font-display text-2xl font-semibold tracking-tight md:text-3xl"
             >
-              Read the work <span aria-hidden>↓</span>
-            </a>
-            <a
-              href={site.socials.github}
-              target="_blank"
-              rel="noreferrer"
-              className="label-mono text-muted-on-ink underline decoration-ink-2 underline-offset-8 transition-colors hover:text-paper hover:decoration-signal"
+              {site.name}
+            </h1>
+            <p
+              className="settle mt-5 font-display text-[clamp(2.5rem,5.4vw,4.75rem)] leading-[0.95] font-semibold tracking-[-0.02em] text-balance"
+              style={{ "--d": "120ms" } as React.CSSProperties}
             >
-              GitHub ↗
-            </a>
-          </div>
-        </div>
+              {site.tagline}
+            </p>
 
-        {/* Status bar */}
-        <dl className="label-mono grid grid-cols-1 gap-3 border-t border-ink-2 py-5 text-muted-on-ink sm:grid-cols-[auto_1fr_auto] sm:items-center sm:gap-8">
-          <div>
-            <dt className="sr-only">Status</dt>
-            <dd className="flex items-center gap-2.5 text-paper">
-              <span
-                aria-hidden
-                className={`relative grid size-2 place-items-center ${
-                  site.availableForRoles ? "text-signal" : "text-muted-on-ink"
-                }`}
-              >
-                {site.availableForRoles && (
-                  <span className="absolute size-2 rounded-full bg-current opacity-60 motion-safe:animate-ping" />
-                )}
-                <span className="size-2 rounded-full bg-current" />
-              </span>
-              {site.availableForRoles ? "Available for roles" : "Heads-down building"}
-            </dd>
-          </div>
-
-          <div className="flex min-w-0 items-center gap-2">
-            <dt className="shrink-0">Last shipped</dt>
-            <dd className="flex min-w-0 items-center gap-2">
+            <div
+              className="settle mt-10 flex flex-wrap items-center gap-x-6 gap-y-4"
+              style={{ "--d": "240ms" } as React.CSSProperties}
+            >
               <a
-                href={lastShipped.href}
+                href="#work"
+                className="label-mono inline-flex items-center gap-3 bg-ink px-5 py-4 text-paper transition-colors hover:bg-annot"
+              >
+                Read the work <span aria-hidden>↓</span>
+              </a>
+              <a
+                href={site.socials.github}
                 target="_blank"
                 rel="noreferrer"
-                className="truncate text-paper normal-case tracking-normal hover:text-signal"
+                className="label-mono underline decoration-line underline-offset-8 transition-colors hover:text-annot hover:decoration-annot"
               >
-                {lastShipped.name}
+                GitHub ↗
               </a>
-              <span aria-hidden>·</span>
-              {isMonth ? (
-                <time dateTime={lastShipped.at}>{lastShipped.at}</time>
-              ) : (
-                <RelativeTime iso={lastShipped.at} />
-              )}
-            </dd>
+            </div>
           </div>
 
-          <div>
-            <dt className="sr-only">Local time</dt>
-            <dd>
-              <LagosClock />
-            </dd>
-          </div>
-        </dl>
+          <dl className="space-y-8 lg:col-span-4 lg:col-start-9 lg:border-l lg:border-line lg:pl-6">
+            {callouts.map((c, i) => (
+              <div
+                key={c.term}
+                className="settle relative"
+                style={{ "--d": `${400 + i * 120}ms` } as React.CSSProperties}
+              >
+                {/* The leader runs back toward the headline. */}
+                <span
+                  aria-hidden
+                  className="draw-x absolute top-2.5 right-full mr-2 hidden w-20 origin-right items-center text-annot lg:flex"
+                  style={{ "--d": `${500 + i * 120}ms` } as React.CSSProperties}
+                >
+                  <span className="size-1.5 shrink-0 rounded-full bg-current" />
+                  <span className="leader-x flex-1" />
+                </span>
+                <dt className="label-mono flex items-center gap-2 text-annot">
+                  <span
+                    aria-hidden
+                    className="grid size-5 place-items-center rounded-full border border-current text-[0.625rem] tracking-normal"
+                  >
+                    {i + 1}
+                  </span>
+                  {c.term}
+                </dt>
+                <dd className="mt-2 text-lg leading-snug">{c.detail}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+
+        <div className="label-mono flex flex-wrap justify-between gap-4 border-t border-line pt-4 text-muted">
+          <span>{figures.length} figures below ↓</span>
+          <span>6.5244° N, 3.3792° E</span>
+        </div>
       </div>
     </section>
-  );
-}
-
-/**
- * The name rises in letter by letter on load. Screen readers get the
- * h1's aria-label instead of 17 separate letters; reduced motion skips it.
- */
-function SplitLetters({ text }: { text: string }) {
-  return (
-    <span aria-hidden>
-      {text.split(" ").map((word, w, words) => (
-        // The space sits between word wrappers, not inside them: a trailing
-        // space inside an inline-block collapses, and the name couldn't wrap.
-        <Fragment key={w}>
-          {w > 0 && " "}
-          <span className="inline-block whitespace-nowrap">
-            {[...word].map((char, i) => {
-              const index = words.slice(0, w).join("").length + i;
-              return (
-                <span
-                  key={i}
-                  className="letter-rise inline-block"
-                  style={{ "--i": index } as React.CSSProperties}
-                >
-                  {char}
-                </span>
-              );
-            })}
-          </span>
-        </Fragment>
-      ))}
-    </span>
   );
 }
