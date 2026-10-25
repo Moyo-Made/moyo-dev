@@ -90,7 +90,7 @@ export function OgFooter({ left }: { left: string }) {
       <span style={{ background: ogColors.mark, color: ogColors.ink, padding: "2px 10px" }}>
         {left}
       </span>
-      <span>Lagos, Nigeria · 6.5244° N, 3.3792° E</span>
+      <span>Lagos, Nigeria</span>
     </div>
   );
 }

@@ -12,7 +12,7 @@ export function PersonJsonLd() {
     "@id": `${siteUrl}/#person`,
     name: site.name,
     alternateName: site.shortName,
-    jobTitle: "Software Engineer",
+    jobTitle: site.role,
     description: site.tagline,
     url: siteUrl,
     email: `mailto:${site.email}`,

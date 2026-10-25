@@ -33,7 +33,7 @@ const themeScript = `(function(){try{var t=localStorage.getItem("theme");if(t===
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: { default: site.name, template: `%s — ${site.name}` },
-  description: site.tagline,
+  description: `${site.role} in ${site.location}. ${site.tagline}`,
   authors: [{ name: site.name, url: siteUrl }],
   // Canonical URLs are set per page — one here would be inherited by every
   // route and point them all at the home page.

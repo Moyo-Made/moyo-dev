@@ -2,7 +2,7 @@ import { ImageResponse } from "next/og";
 import { site } from "@/data/site";
 import { OgFooter, OgLabel, ogColors, ogFonts, ogGrid, ogSize } from "@/lib/og";
 
-export const alt = `${site.name} — ${site.tagline}`;
+export const alt = `${site.name}, ${site.role} — ${site.tagline}`;
 export const size = ogSize;
 export const contentType = "image/png";
 
@@ -27,21 +27,34 @@ export default async function Image() {
           <div
             style={{
               marginTop: 40,
-              fontFamily: "IBM Plex Sans Condensed",
-              fontSize: 40,
-              letterSpacing: "-0.01em",
+              fontFamily: "Geist Mono",
+              fontSize: 22,
+              letterSpacing: "0.12em",
+              textTransform: "uppercase",
+              color: ogColors.muted,
             }}
           >
             {site.name}
           </div>
           <div
             style={{
-              marginTop: 18,
-              maxWidth: 980,
+              marginTop: 14,
               fontFamily: "IBM Plex Sans Condensed",
-              fontSize: 76,
-              lineHeight: 0.98,
-              letterSpacing: "-0.02em",
+              fontSize: 120,
+              lineHeight: 0.92,
+              letterSpacing: "-0.025em",
+            }}
+          >
+            {site.role}
+          </div>
+          <div
+            style={{
+              marginTop: 24,
+              maxWidth: 820,
+              fontFamily: "Geist",
+              fontSize: 32,
+              lineHeight: 1.3,
+              color: ogColors.muted,
             }}
           >
             {site.tagline}

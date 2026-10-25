@@ -5,9 +5,11 @@
 export const site = {
   name: "Moyomade Adegbite",
   shortName: "Moyo",
-  // TODO(moyo): final positioning line — this is the plan's working draft.
+  /** The hero headline. Keep it to a job title. */
+  role: "Frontend developer",
+  /** What you do, in one sentence. Sits under the role in the hero. */
   tagline:
-    "Frontend & full-stack engineer building interactive tools that explain complex systems.",
+    "I build interactive tools that make complex systems easier to understand.",
   location: "Lagos, Nigeria",
   timeZone: "Africa/Lagos",
   email: "adegbitemoyomade2004@gmail.com",

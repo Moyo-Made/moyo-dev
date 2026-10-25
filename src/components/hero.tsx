@@ -1,14 +1,14 @@
 import { site } from "@/data/site";
-import { figures } from "@/data/figures";
 import { getLastShipped } from "@/lib/github";
 import { LagosClock } from "@/components/lagos-clock";
 import { RelativeTime } from "@/components/relative-time";
 
 /**
  * `FIG. 00 — SYSTEM OVERVIEW`: the ten-second answer to who, what, and
- * where's the proof. The positioning line is the headline; three numbered
- * callouts (where, last shipped, availability) are leadered off it like
- * annotations on a drawing. On small screens they stack underneath.
+ * where's the proof. Name, then the role as the headline, then one line on
+ * what the work is. Three numbered callouts (where, last shipped,
+ * availability) are leadered off it like annotations on a drawing; on small
+ * screens they stack underneath.
  */
 export async function Hero() {
   const lastShipped = await getLastShipped();
@@ -61,7 +61,7 @@ export async function Hero() {
 
   return (
     <section aria-labelledby="hero-name" className="bg-grid border-b border-line">
-      <div className="shell flex min-h-svh flex-col pt-32 pb-6 lg:pt-24">
+      <div className="shell flex min-h-svh flex-col pt-32 pb-10 lg:pt-24">
         <p className="label-mono settle">
           <span className="text-annot">Fig. 00</span>
           <span aria-hidden className="text-muted">
@@ -72,14 +72,14 @@ export async function Hero() {
 
         <div className="grid flex-1 content-center gap-x-6 gap-y-14 py-14 lg:grid-cols-12">
           <div className="lg:col-span-7">
-            <h1
-              id="hero-name"
-              className="settle font-display text-2xl font-semibold tracking-tight md:text-3xl"
-            >
-              {site.name}
+            <h1 id="hero-name" className="settle">
+              <span className="label-mono block text-muted">{site.name}</span>
+              <span className="mt-4 block font-display text-[clamp(3.25rem,8vw,7rem)] leading-[0.9] font-semibold tracking-[-0.025em] text-balance">
+                {site.role}
+              </span>
             </h1>
             <p
-              className="settle mt-5 font-display text-[clamp(2.5rem,5.4vw,4.75rem)] leading-[0.95] font-semibold tracking-[-0.02em] text-balance"
+              className="settle mt-6 max-w-xl text-xl leading-snug text-pretty text-muted md:text-2xl"
               style={{ "--d": "120ms" } as React.CSSProperties}
             >
               {site.tagline}
@@ -135,11 +135,6 @@ export async function Hero() {
               </div>
             ))}
           </dl>
-        </div>
-
-        <div className="label-mono flex flex-wrap justify-between gap-4 border-t border-line pt-4 text-muted">
-          <span>{figures.length} figures below ↓</span>
-          <span>6.5244° N, 3.3792° E</span>
         </div>
       </div>
     </section>
