@@ -43,7 +43,7 @@ export const changelog: ChangelogEntry[] = [
     name: "atelier-store",
     action: "shipped",
     note: "A luxury e-commerce storefront.",
-    href: "https://atelier-store-tawny.vercel.app",
+    href: "https://atelierrstore.vercel.app",
   },
   {
     month: "2026-08",

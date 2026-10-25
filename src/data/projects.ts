@@ -159,6 +159,23 @@ export const projects: Project[] = [
     caseStudy: false, // TODO: port from the general site in Step 8
   },
   {
+    slug: "atelier",
+    title: "Atelier — Luxury Storefront",
+    outcome:
+      "A full fashion store: catalogue, search, bag, Stripe checkout, accounts, and an admin for products, stock and orders.",
+    summary:
+      "A luxury e-commerce storefront with its own admin. Built solo on Next.js with Drizzle over Neon Postgres, Better Auth for accounts, and Stripe for checkout.",
+    role: "Solo — design and full stack",
+    year: 2026,
+    stack: ["Next.js", "TypeScript", "Drizzle", "Neon Postgres", "Stripe", "Better Auth"],
+    links: {
+      live: "https://atelierrstore.vercel.app",
+      code: "https://github.com/Moyo-Made/atelier-store",
+    },
+    tier: "also",
+    caseStudy: false,
+  },
+  {
     slug: "internconnect",
     title: "InternConnect",
     outcome:
