@@ -6,9 +6,8 @@ export const sections = [
   { id: "readme", title: "README" },
   { id: "work", title: "Selected work" },
   { id: "experience", title: "Experience" },
-  { id: "changelog", title: "Changelog" },
   { id: "process", title: "How I build" },
-  { id: "notes", title: "Notes" },
+  { id: "writing", title: "Writing" },
   { id: "contact", title: "Contact" },
 ] as const;
 

@@ -25,7 +25,7 @@ export const site = {
   },
   location: "Lagos, Nigeria",
   timeZone: "Africa/Lagos",
-  email: "adegbitemoyomade2004@gmail.com",
+  email: "adegbitemoyomade7@gmail.com",
   /** The tag above your name in the hero. Flip off when you're not looking. */
   availableForRoles: true,
   socials: {

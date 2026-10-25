@@ -13,12 +13,20 @@ export interface Role {
 
 export const jobs: Role[] = [
   {
-    period: "Aug 2024 — Present",
-    role: "Frontend Developer",
-    org: "DevFest Lagos",
+    period: "Jan 2026 — Present",
+    role: "Frontend Engineer",
+    org: "Straqa",
     impact:
-      "Frontend engineer on the team behind the 2024 and 2025 event platforms for 4,000+ attendees. Helped raise accessibility from 82% to 96% (WCAG 2.1 AA) and cut page rollout time by 25% with a shared component library.",
-    tags: ["Next.js", "TypeScript", "Redux", "Accessibility"],
+      "Building the frontend of a logistics infrastructure platform for African businesses, including a transportation management dashboard kept in sync with live data over REST APIs.",
+    tags: ["Next.js", "TypeScript", "TailwindCSS", "REST APIs"],
+  },
+  {
+    period: "Oct 2025 — Present",
+    role: "Frontend Engineer",
+    org: "Gixel",
+    impact:
+      "Led Gixel's move from iOS-only to the web: a Next.js app that turns one product photo into a full fashion campaign, with OpenAI, Gemini and Replicate behind it and Firebase shared with the iOS app.",
+    tags: ["Next.js", "TypeScript", "Firebase", "AI integration"],
   },
   {
     period: "Nov 2024 — Jun 2025",
@@ -29,7 +37,7 @@ export const jobs: Role[] = [
     tags: ["React", "TypeScript", "SEO"],
   },
   {
-    period: "Feb 2024 — Aug 2024",
+    period: "Feb 2024 — Sep 2024",
     role: "Frontend Developer",
     org: "Laferla",
     impact:
@@ -57,10 +65,10 @@ export const community: Role[] = [
   },
   {
     period: "Aug 2024 — Present",
-    role: "Digital Working Group",
+    role: "Frontend Engineer, Digital Working Group",
     org: "DevFest Lagos",
     impact:
-      "Plan and ship the conference's digital platforms with cross-functional teams.",
-    tags: ["Community", "Event platforms"],
+      "Frontend engineer on the team behind the 2024 and 2025 event platforms for 4,000+ attendees. Helped raise accessibility from 82% to 96% (WCAG 2.1 AA) and cut page rollout time by 25% with a shared component library.",
+    tags: ["Next.js", "TypeScript", "Accessibility", "Community"],
   },
 ];

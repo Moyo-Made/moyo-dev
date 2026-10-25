@@ -29,7 +29,7 @@ export default function NotFound() {
             {[
               { cmd: "cd ~", href: "/", note: "home" },
               { cmd: "ls work", href: "/#work", note: "selected work" },
-              { cmd: "git log", href: "/changelog", note: "everything shipped" },
+              { cmd: "cat experience", href: "/#experience", note: "where I've worked" },
             ].map((c) => (
               <li key={c.cmd}>
                 <span className="text-annot">$</span>{" "}

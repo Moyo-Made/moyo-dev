@@ -9,6 +9,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${siteUrl}/work/${slug}`,
       priority: 0.8,
     })),
-    { url: `${siteUrl}/changelog`, priority: 0.5 },
   ];
 }

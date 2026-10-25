@@ -7,10 +7,10 @@ const date = new Intl.DateTimeFormat("en-GB", {
   timeZone: "UTC",
 });
 
-/** `06 — NOTES`: technical writing, as a table. Titles and dates do the work. */
+/** `05 — WRITING`: technical writing, as a table. Titles and dates do the work. */
 export function NotesSection() {
   return (
-    <Section id="notes" caption={`${notes.length} posts`}>
+    <Section id="writing" caption={`${notes.length} articles`}>
       <div
         aria-hidden
         className="label-mono hidden grid-cols-[7rem_1fr_auto] gap-x-6 border-b-2 border-ink pb-2 text-muted md:grid"

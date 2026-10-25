@@ -1,7 +1,8 @@
+import Link from "next/link";
 import { buildSteps } from "@/data/process";
 
 /**
- * `05 — HOW I BUILD` as an actual flow diagram: one box per step,
+ * `04 — HOW I BUILD` as an actual flow diagram: one box per step,
  * joined by arrows (left to right on wide screens, top to bottom on small
  * ones), each with its annotation leadered underneath. Static markup, so it
  * reads the same without JavaScript; connectors draw in on scroll where the
@@ -41,12 +42,20 @@ export function FlowDiagram() {
           </li>
         ))}
       </ol>
-      <p className="label-mono mt-12 flex items-center gap-3 text-muted">
-        <span aria-hidden className="text-base text-annot">
-          ↺
-        </span>
-        Every write-up feeds the next scope.
-      </p>
+      <div className="mt-12 flex flex-wrap items-center justify-between gap-x-6 gap-y-4">
+        <p className="label-mono flex items-center gap-3 text-muted">
+          <span aria-hidden className="text-base text-annot">
+            ↺
+          </span>
+          Every write-up feeds the next scope.
+        </p>
+        <Link
+          href="/work/social-shake"
+          className="label-mono underline decoration-line underline-offset-4 hover:text-annot hover:decoration-annot"
+        >
+          Read the Social Shake case study →
+        </Link>
+      </div>
     </>
   );
 }
