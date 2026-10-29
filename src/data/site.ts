@@ -11,7 +11,7 @@ export const site = {
   description:
     "Moyomade Adegbite is a software engineer helping founders and teams build reliable web products, SaaS features, and AI-powered applications. Explore selected work and get in touch.",
   hero: {
-    eyebrow: "Independent software engineer",
+    eyebrow: "Software engineer",
     headline: ["Good ideas deserve", "great execution."],
     body: "I’m Moyomade, a software engineer helping founders and teams build thoughtful, reliable digital products. I’ve worked across AI, marketplaces, fintech, and logistics.",
   },
