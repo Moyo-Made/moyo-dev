@@ -13,7 +13,7 @@ export interface Note {
 
 export const notes: Note[] = [
   {
-    title: "You've Seen This in ChatGPT, You Just Didn't Know the Name",
+    title: "You’ve Seen This in ChatGPT, You Just Didn’t Know the Name",
     date: "2026-05-06",
     platform: "Hashnode",
     href: "https://madevblog.hashnode.dev/you-ve-seen-this-in-chatgpt-you-just-didn-t-know-the-name",
@@ -25,7 +25,7 @@ export const notes: Note[] = [
     href: "https://madevblog.hashnode.dev/from-ui-to-ai-where-i-begin",
   },
   {
-    title: "Aim for the Bigger Picture in Tech: It's More Than Just the Money",
+    title: "Aim for the Bigger Picture in Tech: It’s More Than Just the Money",
     date: "2024-10-20",
     platform: "Hashnode",
     href: "https://madevblog.hashnode.dev/aim-for-the-bigger-picture-in-tech-its-more-than-just-the-money",

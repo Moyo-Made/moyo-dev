@@ -4,11 +4,16 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
   caseStudySlugs,
-  featuredProjects,
+  formatList,
   getProject,
   nextCaseStudy,
+  projectDomain,
 } from "@/lib/projects";
 import { caseStudyComponents } from "@/components/case-study-mdx";
+import { Highlights, StageScreens } from "@/components/project-stage";
+import { ArrowLeft, ArrowRight } from "@/components/icons";
+import { Corners, Eyebrow, Panel } from "@/components/panel";
+import { CaseStudyBar } from "@/components/case-study-bar";
 import { site } from "@/data/site";
 
 // With Cache Components on, `dynamicParams` is gone: unknown slugs are
@@ -23,15 +28,13 @@ export function generateStaticParams() {
   return caseStudySlugs.map((slug) => ({ slug }));
 }
 
-export async function generateMetadata({
-  params,
-}: PageProps<"/work/[slug]">): Promise<Metadata> {
+export async function generateMetadata({ params }: PageProps<"/work/[slug]">): Promise<Metadata> {
   const { slug } = await params;
   const project = getProject(slug);
   if (!project) return {};
   const url = `/work/${slug}`;
   return {
-    title: project.title,
+    title: `${project.name} case study`,
     description: project.summary,
     alternates: { canonical: url },
     // Child openGraph replaces the parent's, so siteName is repeated here.
@@ -39,7 +42,7 @@ export async function generateMetadata({
     openGraph: {
       type: "article",
       siteName: site.name,
-      locale: "en_NG",
+      locale: "en_GB",
       url,
       title: project.title,
       description: project.outcome,
@@ -48,9 +51,11 @@ export async function generateMetadata({
 }
 
 /**
- * The case-study template, drawn as its own sheet: a grid-paper title block,
- * the screenshot in crop marks, a spec table beside the TL;DR and
- * the write-up, then the next case study. Every fact comes from
+ * The case-study template, the same shape for every project: the lit
+ * header panel with what it is and my part in it, the screen, a sticky bar
+ * of its sections, the four short answers, then the numbered write-up
+ * (problem, what made it hard, how it was built, the key decision, impact,
+ * what I'd change) and the next case study. Every fact comes from
  * src/data/projects.ts; the MDX is the write-up only.
  */
 export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
@@ -59,147 +64,137 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
   if (!project?.caseStudy) notFound();
 
   const { default: Body } = await import(`@/content/work/${slug}.mdx`);
-  const number = featuredProjects.findIndex((p) => p.slug === slug) + 1;
   const next = nextCaseStudy(slug);
+  const domain = projectDomain(project);
+  const action = project.links.live
+    ? { href: project.links.live, label: `Visit ${domain}` }
+    : project.links.code
+      ? { href: project.links.code, label: "Source code" }
+      : undefined;
 
   const facts = [
     { term: "Role", detail: project.role },
     project.team && { term: "Team", detail: project.team },
     { term: "Year", detail: String(project.year) },
-    { term: "Stack", detail: project.stack.join(", ") },
+    { term: "Built with", detail: formatList(project.stack) },
   ].filter(Boolean) as { term: string; detail: string }[];
-
-  const link =
-    "underline decoration-annot underline-offset-4 hover:text-annot";
 
   return (
     <article>
-      <header className="bg-grid border-b border-line">
-        <div className="shell pt-32 pb-14 md:pb-20 lg:pt-24">
-          <Link href="/#work" className="label-mono text-muted hover:text-annot">
-            ← All work
+      <Panel as="header">
+        <div className="shell pt-10 md:pt-14">
+          <Link
+            href="/work"
+            className="flex w-fit items-center gap-1.5 text-[0.9375rem] text-muted transition-colors hover:text-ink"
+          >
+            <ArrowLeft className="nudge-left size-4" />
+            All work
           </Link>
-          <p className="label-mono mt-12 border-t-2 border-ink pt-3">
-            <span className="text-annot">
-              Case study{number > 0 ? ` ${String(number).padStart(2, "0")}` : ""}
-            </span>
-            <span aria-hidden className="text-muted">
-              {" — "}
-            </span>
-            {project.year}
-          </p>
-          <h1 className="mt-6 max-w-5xl font-display text-[clamp(2.5rem,6.4vw,5.5rem)] leading-[0.95] font-semibold tracking-[-0.02em] text-balance">
-            {project.title}
+
+          <Eyebrow className="rise mt-12 md:mt-16">Case study · {project.year}</Eyebrow>
+          <h1
+            className="rise mt-6 text-[clamp(2.75rem,1.4rem+5vw,5.25rem)] leading-[1.02] font-semibold tracking-[-0.045em] text-balance"
+            style={{ "--d": "80ms" } as React.CSSProperties}
+          >
+            {project.name}
           </h1>
-          <p className="mt-8 max-w-3xl text-xl leading-snug text-muted md:text-2xl">
+          <p
+            className="rise mt-6 max-w-[44rem] text-lg leading-relaxed text-pretty text-muted md:text-xl md:leading-relaxed"
+            style={{ "--d": "180ms" } as React.CSSProperties}
+          >
             {project.summary}
           </p>
-        </div>
-      </header>
 
-      {project.image && (
-        <figure className="shell pt-12 md:pt-16">
-          <div className="ticks p-3">
-            <Image
-              src={project.image.src}
-              alt={project.image.alt}
-              width={2400}
-              height={1500}
-              loading="eager"
-              fetchPriority="high"
-              sizes="(min-width: 1200px) 1112px, 100vw"
-              className="aspect-[16/10] w-full border border-line object-cover object-top"
-            />
-          </div>
-          <figcaption className="label-mono mt-3 px-3 text-muted">
-            {project.image.alt}
-          </figcaption>
-        </figure>
-      )}
-
-      <div className="shell grid grid-cols-1 gap-x-6 gap-y-12 py-16 md:grid-cols-12 md:py-24">
-        <aside className="md:sticky md:top-20 md:col-span-4 md:self-start lg:col-span-3">
-          <dl className="border-t-2 border-ink">
+          <dl
+            className="rise mt-14 grid gap-x-8 border-t border-ink/10 sm:grid-cols-2 lg:grid-cols-4"
+            style={{ "--d": "260ms" } as React.CSSProperties}
+          >
             {facts.map((f) => (
-              <div key={f.term} className="border-b border-line py-3">
-                <dt className="label-mono text-muted">{f.term}</dt>
-                <dd className="mt-1 leading-snug">{f.detail}</dd>
+              <div
+                key={f.term}
+                className="border-b border-ink/10 py-5 last:border-b-0 sm:py-6 lg:border-b-0"
+              >
+                <dt className="font-mono text-xs tracking-[0.04em] text-muted uppercase">
+                  {f.term}
+                </dt>
+                <dd className="mt-2 text-[0.9375rem] leading-relaxed text-pretty">{f.detail}</dd>
               </div>
             ))}
-            {(project.links.live || project.links.code) && (
-              <div className="border-b border-line py-3">
-                <dt className="label-mono text-muted">Links</dt>
-                <dd className="mt-1 flex flex-col gap-1">
-                  {project.links.live && (
-                    <a
-                      href={project.links.live}
-                      target="_blank"
-                      rel="noreferrer"
-                      className={link}
-                    >
-                      Live site ↗
-                    </a>
-                  )}
-                  {project.links.code && (
-                    <a
-                      href={project.links.code}
-                      target="_blank"
-                      rel="noreferrer"
-                      className={link}
-                    >
-                      Source code ↗
-                    </a>
-                  )}
-                </dd>
-              </div>
-            )}
           </dl>
-        </aside>
+        </div>
+      </Panel>
 
-        <div className="md:col-span-8 lg:col-start-5">
-          {project.tldr && (
-            <section aria-label="TL;DR" className="ticks bg-paper-2 p-6 md:p-8">
-              <p className="label-mono text-annot">TL;DR</p>
-              <dl className="mt-5 grid gap-4 md:grid-cols-[6rem_1fr]">
-                {(
-                  [
-                    ["Problem", project.tldr.problem],
-                    ["Built", project.tldr.built],
-                    ["Result", project.tldr.result],
-                  ] as const
-                ).map(([term, detail]) => (
-                  <div key={term} className="contents">
-                    <dt className="label-mono pt-1 text-muted">{term}</dt>
-                    <dd className="text-lg leading-snug">{detail}</dd>
-                  </div>
-                ))}
-              </dl>
-            </section>
-          )}
-
-          <div className="mt-20">
-            <Body components={caseStudyComponents} />
+      {project.image && (
+        <div className="shell mt-10 md:mt-14">
+          <div className="relative">
+            <div className="stage group">
+              <StageScreens screens={[project.image]} domain={domain} priority />
+            </div>
+            <Corners inset={-6} />
           </div>
+        </div>
+      )}
 
-          <nav aria-label="More work" className="mt-24 border-t-2 border-ink pt-4">
-            {next ? (
-              <Link href={`/work/${next.slug}`} className="group block">
-                <span className="label-mono text-muted">Next case study</span>
-                <span className="mt-3 block font-display text-4xl leading-tight font-semibold tracking-tight group-hover:underline group-hover:decoration-annot group-hover:decoration-2 group-hover:underline-offset-8">
-                  {next.title} <span className="text-annot">→</span>
-                </span>
-              </Link>
-            ) : (
-              <Link
-                href="/#work"
-                className="label-mono inline-block bg-ink px-4 py-3 text-paper transition-colors hover:bg-annot"
-              >
-                See all work ↑
-              </Link>
-            )}
-          </nav>
+      {/* A direct child of the article, so it sticks for the article's length. */}
+      <CaseStudyBar
+        name={project.name}
+        bodyId="case-study-body"
+        action={action}
+        className="mt-14 md:mt-20"
+      />
+
+      {project.highlights && (
+        <section aria-labelledby="at-a-glance" className="shell mt-14 md:mt-20">
+          <h2 id="at-a-glance" className="section-label">
+            <span className="hatch" />
+            At a glance
+          </h2>
+          <Highlights highlights={project.highlights} className="mt-6" />
+        </section>
+      )}
+
+      <div className="shell py-20 md:py-28">
+        <div id="case-study-body" className="numbered-sections mx-auto max-w-[42rem]">
+          <Body components={caseStudyComponents} />
         </div>
       </div>
+
+      {next && (
+        <nav aria-label="More work" className="shell pb-24 md:pb-32">
+          <Link
+            href={`/work/${next.slug}`}
+            className="tile group flex min-h-[20rem] flex-col p-7 md:min-h-[24rem] md:p-10"
+          >
+            <span className="relative z-10 max-w-[28rem]">
+              <span className="font-mono text-xs tracking-[0.04em] text-muted uppercase">
+                Next case study
+              </span>
+              <span className="mt-3 block text-[clamp(1.75rem,1.2rem+2vw,2.75rem)] leading-tight font-semibold tracking-[-0.035em]">
+                {next.name}
+              </span>
+              <span className="mt-2 block leading-relaxed text-pretty text-muted">
+                {next.outcome}
+              </span>
+              <span className="mt-6 inline-flex items-center gap-1.5 text-[0.9375rem] font-medium">
+                Read it
+                <ArrowRight className="nudge-out size-4" />
+              </span>
+            </span>
+            {next.image && (
+              <span className="tile-shot window absolute right-6 bottom-0 hidden w-[48%] md:block">
+                <Image
+                  src={next.image.src}
+                  alt=""
+                  width={next.image.width}
+                  height={next.image.height}
+                  sizes="560px"
+                  className="block h-auto w-full"
+                />
+              </span>
+            )}
+          </Link>
+        </nav>
+      )}
     </article>
   );
 }

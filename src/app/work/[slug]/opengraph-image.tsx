@@ -2,8 +2,8 @@ import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { ImageResponse } from "next/og";
 import { site } from "@/data/site";
-import { caseStudySlugs, featuredProjects, getProject } from "@/lib/projects";
-import { OgFooter, OgLabel, ogColors, ogFonts, ogGrid, ogSize } from "@/lib/og";
+import { caseStudySlugs, getProject } from "@/lib/projects";
+import { OgEyebrow, OgFooter, ogColors, ogFonts, ogFrame, ogSize } from "@/lib/og";
 
 export const size = ogSize;
 export const contentType = "image/png";
@@ -23,7 +23,7 @@ export function generateImageMetadata({
   return [
     {
       id: "og",
-      alt: project ? `${project.title} — ${project.outcome}` : site.name,
+      alt: project ? `${project.name} case study: ${project.outcome}` : site.name,
       size,
       contentType,
     },
@@ -32,7 +32,7 @@ export function generateImageMetadata({
 
 const mime = (src: string) => (src.endsWith(".png") ? "image/png" : "image/jpeg");
 
-/** Share card for a case study: title and outcome, with the screenshot beside. */
+/** Share card for a case study: name and outcome, with the screenshot beside. */
 export default async function Image({
   params,
 }: {
@@ -40,7 +40,6 @@ export default async function Image({
 }) {
   const { slug } = await params;
   const project = getProject(slug)!;
-  const number = featuredProjects.findIndex((p) => p.slug === slug) + 1;
 
   const shot = project.image
     ? `data:${mime(project.image.src)};base64,${(
@@ -50,38 +49,26 @@ export default async function Image({
 
   return new ImageResponse(
     (
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
-          width: "100%",
-          height: "100%",
-          padding: "64px 72px 52px",
-          ...ogGrid,
-          color: ogColors.ink,
-        }}
-      >
-        <div style={{ display: "flex", gap: 48 }}>
+      <div style={ogFrame}>
+        <div style={{ display: "flex", gap: 56 }}>
           <div style={{ display: "flex", flexDirection: "column", flex: 1 }}>
-            <OgLabel fig={`Case study ${String(number).padStart(2, "0")}`}>{String(project.year)}</OgLabel>
+            <OgEyebrow>{`Case study · ${project.year}`}</OgEyebrow>
             <div
               style={{
-                marginTop: 28,
-                fontFamily: "IBM Plex Sans Condensed",
-                fontSize: 76,
-                lineHeight: 0.98,
-                letterSpacing: "-0.02em",
+                marginTop: 36,
+                fontSize: 80,
+                fontWeight: 600,
+                lineHeight: 1.02,
+                letterSpacing: "-0.04em",
               }}
             >
-              {project.title}
+              {project.name}
             </div>
             <div
               style={{
                 marginTop: 28,
-                fontFamily: "Geist",
-                fontSize: 28,
-                lineHeight: 1.3,
+                fontSize: 30,
+                lineHeight: 1.35,
                 color: ogColors.muted,
               }}
             >
@@ -89,21 +76,28 @@ export default async function Image({
             </div>
           </div>
           {shot && (
-            <img
-              src={shot}
-              alt=""
-              width={440}
-              height={275}
+            <div
               style={{
-                marginTop: 52,
-                objectFit: "cover",
-                objectPosition: "top",
+                display: "flex",
+                marginTop: 8,
+                borderRadius: 14,
+                overflow: "hidden",
+                background: ogColors.surface,
                 border: `1px solid ${ogColors.line}`,
+                boxShadow: "0 24px 48px -16px rgba(32, 33, 31, 0.28)",
               }}
-            />
+            >
+              <img
+                src={shot}
+                alt=""
+                width={460}
+                height={300}
+                style={{ objectFit: "cover", objectPosition: "top" }}
+              />
+            </div>
           )}
         </div>
-        <OgFooter left={site.name} />
+        <OgFooter />
       </div>
     ),
     { ...size, fonts: ogFonts },

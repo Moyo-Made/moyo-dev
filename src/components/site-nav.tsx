@@ -3,103 +3,150 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
-import { site } from "@/data/site";
-import { sections } from "@/data/sections";
-import { ThemeToggle } from "@/components/theme-toggle";
+
+const links = [
+  { key: "work", label: "Work", href: "/#work" },
+  { key: "about", label: "About", href: "/about" },
+  { key: "writing", label: "Writing", href: "/#writing" },
+] as const;
+
+type LinkKey = (typeof links)[number]["key"];
 
 /**
- * The title bar: the M mark on the left, a numbered index of every section, theme
- * and email on the right. On the home page the section being read is
- * highlighted. Below lg the index drops to a scrolling strip under the bar,
- * so every section stays one tap away without a menu to open.
+ * A quiet sticky bar: clear over the top of the page, frosted with a
+ * hairline once it scrolls. On wide screens a soft pill slides to where
+ * you are; below md the links fold into a menu that overlays the page.
  */
 export function SiteNav() {
-  const current = useCurrentSection();
-  const stripRef = useRef<HTMLElement>(null);
+  const pathname = usePathname();
+  const [scrolled, setScrolled] = useState(false);
+  const [open, setOpen] = useState(false);
+  const section = useHomeSection(pathname === "/");
 
-  // Keep the highlighted section in view in the mobile strip. Scrolls only
-  // the strip, never the page. Measured on screen, since the link's offset
-  // is relative to its own (positioned) <li>.
+  const current: LinkKey | null =
+    pathname === "/"
+      ? section
+      : pathname.startsWith("/work")
+        ? "work"
+        : pathname.startsWith("/about")
+          ? "about"
+          : null;
+
   useEffect(() => {
-    const strip = stripRef.current;
-    const active = strip?.querySelector<HTMLElement>("[aria-current]");
-    if (!strip || !active) return;
-    const left =
-      active.getBoundingClientRect().left - strip.getBoundingClientRect().left + strip.scrollLeft;
-    strip.scrollTo({
-      left: left - (strip.clientWidth - active.offsetWidth) / 2,
-      behavior: "smooth",
-    });
-  }, [current]);
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
-  const index = <SectionIndex current={current} />;
+  // Escape closes the menu; so does growing past the breakpoint it lives at.
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    const wide = window.matchMedia("(min-width: 48rem)");
+    const onWide = () => wide.matches && setOpen(false);
+    window.addEventListener("keydown", onKey);
+    wide.addEventListener("change", onWide);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      wide.removeEventListener("change", onWide);
+    };
+  }, [open]);
+
+  const solid = scrolled || open;
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 border-b border-line bg-paper/90 backdrop-blur-md">
-      <div className="shell flex h-12 items-center justify-between gap-6">
+    <header
+      className={`sticky top-0 z-40 border-b transition-[background-color,border-color] duration-300 ${
+        solid ? "border-line bg-canvas/85 backdrop-blur-md backdrop-saturate-150" : "border-transparent"
+      }`}
+    >
+      <div className="shell flex h-16 items-center justify-between gap-6">
         <Link
           href="/"
-          aria-label={`${site.name} — home`}
-          className="group relative grid size-8 place-items-center bg-ink font-display text-xl leading-none font-semibold text-paper transition-colors hover:bg-annot"
+          onClick={() => setOpen(false)}
+          className="text-[1.0625rem] font-semibold tracking-[-0.03em]"
+          aria-label="moyomade — home"
         >
-          {/* The favicon's mark: a condensed M with the status square. */}
-          <span aria-hidden>M</span>
-          <span aria-hidden className="absolute right-0.5 bottom-0.5 size-[5px] bg-mark" />
+          moyomade<span className="text-accent">.</span>
         </Link>
 
-        <nav aria-label="Sections" className="hidden lg:block">
-          {index}
+        <nav aria-label="Main" className="hidden items-center gap-3 md:flex">
+          <LinkList current={current} />
+          <a href="#contact" className="btn btn-sm btn-primary ml-2">
+            Let&rsquo;s talk
+          </a>
         </nav>
 
-        <div className="flex items-center gap-1">
-          <ThemeToggle />
-          <a
-            href={`mailto:${site.email}`}
-            aria-label={`Email ${site.shortName}`}
-            className="grid size-8 place-items-center hover:text-annot"
-          >
-            <svg
-              aria-hidden
-              viewBox="0 0 24 24"
-              className="size-5"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.25"
-            >
-              <rect x="3" y="5" width="18" height="14" />
-              <path d="m3.5 6 8.5 7 8.5-7" />
-            </svg>
-          </a>
-        </div>
+        <button
+          type="button"
+          onClick={() => setOpen((o) => !o)}
+          aria-expanded={open}
+          aria-controls="site-menu"
+          aria-label={open ? "Close menu" : "Open menu"}
+          className="-mr-2 grid size-10 place-items-center rounded-lg md:hidden"
+        >
+          <span aria-hidden className="relative block h-3 w-[18px]">
+            <span
+              className={`absolute left-0 h-[1.5px] w-full rounded-full bg-current transition-[top,rotate] duration-300 ease-soft ${
+                open ? "top-[5px] rotate-45" : "top-0"
+              }`}
+            />
+            <span
+              className={`absolute left-0 h-[1.5px] w-full rounded-full bg-current transition-[top,rotate] duration-300 ease-soft ${
+                open ? "top-[5px] -rotate-45" : "top-[10px]"
+              }`}
+            />
+          </span>
+        </button>
       </div>
 
-      <nav
-        ref={stripRef}
-        aria-label="Sections"
-        className="relative overflow-x-auto border-t border-line [scrollbar-width:none] lg:hidden"
+      {/* Overlays the page rather than pushing it down, so closing it mid
+          scroll can't shift where an anchor lands. */}
+      <div
+        id="site-menu"
+        data-open={open}
+        className="menu-panel absolute inset-x-0 top-full border-b border-line bg-canvas shadow-[0_16px_32px_-16px_rgb(32_33_31/0.18)] md:hidden"
       >
-        <div className="shell py-1">{index}</div>
-      </nav>
+        <nav aria-label="Main" className="min-h-0 overflow-hidden">
+          <ul className="shell pt-2 pb-6">
+            {links.map((l) => (
+              <li key={l.key} className="border-b border-line">
+                <Link
+                  href={l.href}
+                  onClick={() => setOpen(false)}
+                  aria-current={current === l.key ? "location" : undefined}
+                  className="flex items-center justify-between py-4 text-2xl font-medium tracking-[-0.025em]"
+                >
+                  {l.label}
+                  {current === l.key && <span aria-hidden className="size-1.5 rounded-full bg-accent" />}
+                </Link>
+              </li>
+            ))}
+            <li className="pt-6">
+              <a href="#contact" onClick={() => setOpen(false)} className="btn btn-primary w-full">
+                Let&rsquo;s talk
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
     </header>
   );
 }
 
 /**
- * The numbered section links. The highlight is one block behind them that
- * slides and stretches from the old section to the new one, rather than a
- * background on each link. It fades in where it first lands and fades out
- * where it was, and jumps without sliding when the layout resizes.
+ * The desktop links. The highlight is one pill behind them that slides from
+ * the old place to the new; it fades in where it first lands.
  */
-function SectionIndex({ current }: { current: string | null }) {
-  const listRef = useRef<HTMLOListElement>(null);
-  const [mark, setMark] = useState({ x: 0, w: 0, shown: false, slide: false });
+function LinkList({ current }: { current: LinkKey | null }) {
+  const listRef = useRef<HTMLUListElement>(null);
+  const [pill, setPill] = useState({ x: 0, w: 0, shown: false, slide: false });
 
-  // Measure the highlighted item against the list (each <li> is positioned,
-  // so the link's own offset would be 0). Slides only between two sections,
-  // so the first highlight doesn't sweep in from the left edge.
+  // Measured from the <li>: it's positioned, so the link's own offset is 0.
   const place = useCallback((slide: boolean) => {
-    const active = listRef.current?.querySelector<HTMLElement>("[aria-current]")?.closest("li");
-    setMark((prev) =>
+    const active = listRef.current?.querySelector("[aria-current]")?.closest("li");
+    setPill((prev) =>
       active
         ? { x: active.offsetLeft, w: active.offsetWidth, shown: true, slide: slide && prev.shown }
         : { ...prev, shown: false, slide: false },
@@ -108,8 +155,7 @@ function SectionIndex({ current }: { current: string | null }) {
 
   useLayoutEffect(() => place(true), [current, place]);
 
-  // Fonts loading, the window resizing, or the desktop index appearing at lg
-  // all move the links; follow them without animating.
+  // Fonts loading or the window resizing move the links; follow without sliding.
   useEffect(() => {
     const list = listRef.current;
     if (!list) return;
@@ -119,63 +165,56 @@ function SectionIndex({ current }: { current: string | null }) {
   }, [place]);
 
   return (
-    <ol ref={listRef} className="relative flex items-center gap-1">
-      <span
+    <ul ref={listRef} className="relative flex items-center">
+      <li
         aria-hidden
-        className={`absolute inset-y-0 left-0 bg-mark ease-[cubic-bezier(0.2,0.7,0.2,1)] ${
-          mark.slide ? "transition-[translate,width,opacity] duration-300" : "transition-opacity duration-200"
-        } ${mark.shown ? "opacity-100" : "opacity-0"}`}
-        style={{ translate: `${mark.x}px`, width: mark.w }}
+        className={`absolute inset-y-0 left-0 rounded-lg bg-ink/[0.055] ease-soft ${
+          pill.slide ? "transition-[translate,width,opacity] duration-300" : "transition-opacity duration-200"
+        } ${pill.shown ? "opacity-100" : "opacity-0"}`}
+        style={{ translate: `${pill.x}px`, width: pill.w }}
       />
-      {sections.map((f, i) => {
-        const active = current === f.id;
-        return (
-          <li key={f.id} className="relative shrink-0">
-            <Link
-              href={`/#${f.id}`}
-              aria-current={active ? "location" : undefined}
-              className={`label-mono flex items-baseline gap-1.5 px-2 py-1.5 transition-colors duration-300 ${
-                active ? "text-on-mark" : "text-muted hover:text-ink"
-              }`}
-            >
-              <span className={active ? undefined : "text-annot"}>
-                {String(i + 1).padStart(2, "0")}
-              </span>
-              {f.title}
-            </Link>
-          </li>
-        );
-      })}
-    </ol>
+      {links.map((l) => (
+        <li key={l.key} className="relative">
+          <Link
+            href={l.href}
+            aria-current={current === l.key ? "location" : undefined}
+            className={`block rounded-lg px-3 py-1.5 text-[0.9375rem] transition-colors duration-200 ${
+              current === l.key ? "text-ink" : "text-muted hover:text-ink"
+            }`}
+          >
+            {l.label}
+          </Link>
+        </li>
+      ))}
+    </ul>
   );
 }
 
-/**
- * The section crossing the upper third of the screen, on the home page only.
- * Null elsewhere, and before the first scroll event lands.
- */
-function useCurrentSection() {
-  const pathname = usePathname();
-  const [current, setCurrent] = useState<string | null>(null);
+/** On the home page, the linked section crossing a band a third of the way down. */
+function useHomeSection(active: boolean) {
+  const [current, setCurrent] = useState<LinkKey | null>(null);
 
   useEffect(() => {
-    if (pathname !== "/") return;
+    if (!active) return;
     const observer = new IntersectionObserver(
       (entries) => {
-        for (const e of entries) if (e.isIntersecting) setCurrent(e.target.id);
+        for (const e of entries) {
+          const id = e.target.id as LinkKey;
+          if (e.isIntersecting) setCurrent(id);
+          else setCurrent((c) => (c === id ? null : c));
+        }
       },
-      // A thin band a third of the way down the viewport.
-      { rootMargin: "-33% 0px -66% 0px" },
+      { rootMargin: "-33% 0px -60% 0px" },
     );
-    for (const f of sections) {
-      const el = document.getElementById(f.id);
+    for (const l of links) {
+      const el = document.getElementById(l.key);
       if (el) observer.observe(el);
     }
     return () => {
       observer.disconnect();
       setCurrent(null);
     };
-  }, [pathname]);
+  }, [active]);
 
   return current;
 }

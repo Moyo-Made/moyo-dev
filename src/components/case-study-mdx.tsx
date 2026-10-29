@@ -1,58 +1,63 @@
 import Image from "next/image";
 import type { MDXComponents } from "mdx/types";
+import { Children } from "react";
+
+/** "What I'd do differently" → "what-id-do-differently", for heading anchors. */
+function slugify(node: React.ReactNode) {
+  return Children.toArray(node)
+    .filter((c) => typeof c === "string")
+    .join("")
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .trim()
+    .replace(/\s+/g, "-");
+}
 
 /**
- * Typography for case-study write-ups. Passed to each case study's MDX
- * directly (not via the global mdx-components.tsx) so the README keeps its
- * own large-type styling.
+ * Typography for case-study write-ups, passed to each case study's MDX
+ * directly. Section headings get ids, so the page's index can link to and
+ * follow them.
  */
 export const caseStudyComponents: MDXComponents = {
-  h2: (props) => (
+  h2: ({ children, ...props }) => (
     <h2
-      className="mt-20 font-display text-3xl leading-tight font-semibold tracking-tight first:mt-0 md:text-4xl"
+      id={slugify(children)}
+      className="mt-20 scroll-mt-34 text-[1.75rem] leading-tight font-semibold tracking-[-0.03em] first:mt-0 md:text-[2rem]"
       {...props}
-    />
+    >
+      {children}
+    </h2>
   ),
   h3: (props) => (
-    <h3 className="mt-10 font-display text-2xl leading-snug font-semibold" {...props} />
+    <h3 className="mt-10 text-xl leading-snug font-semibold tracking-[-0.02em]" {...props} />
   ),
-  p: (props) => (
-    <p className="mt-5 max-w-[68ch] text-lg leading-relaxed" {...props} />
-  ),
+  p: (props) => <p className="mt-5 max-w-[42rem] text-[1.0625rem] leading-[1.75]" {...props} />,
   ul: (props) => (
     <ul
-      className="mt-5 max-w-[68ch] list-disc space-y-2 pl-6 text-lg leading-relaxed marker:text-muted"
+      className="mt-5 max-w-[42rem] list-disc space-y-2 pl-6 text-[1.0625rem] leading-[1.75] marker:text-muted"
       {...props}
     />
   ),
   ol: (props) => (
     <ol
-      className="mt-5 max-w-[68ch] list-decimal space-y-2 pl-6 text-lg leading-relaxed marker:text-muted"
+      className="mt-5 max-w-[42rem] list-decimal space-y-2 pl-6 text-[1.0625rem] leading-[1.75] marker:text-muted"
       {...props}
     />
   ),
   strong: (props) => <strong className="font-semibold" {...props} />,
-  a: (props) => (
-    <a
-      className="underline decoration-annot underline-offset-4 hover:text-annot"
-      {...props}
-    />
-  ),
+  a: (props) => <a className="link" {...props} />,
   code: (props) => (
-    <code
-      className="bg-paper-2 px-1.5 py-0.5 font-mono text-[0.88em]"
-      {...props}
-    />
+    <code className="rounded-[5px] bg-stage px-1.5 py-0.5 font-mono text-[0.85em]" {...props} />
   ),
   pre: (props) => (
     <pre
-      className="mt-6 overflow-x-auto border border-line bg-paper-2 p-5 font-mono text-sm leading-relaxed [&_code]:bg-transparent [&_code]:p-0 [&_code]:text-[1em]"
+      className="mt-6 max-w-[42rem] overflow-x-auto rounded-xl border border-line bg-surface p-5 font-mono text-sm leading-relaxed [&_code]:bg-transparent [&_code]:p-0 [&_code]:text-[1em]"
       {...props}
     />
   ),
   blockquote: (props) => (
     <blockquote
-      className="mt-8 border-l-2 border-annot pl-6 font-display text-2xl leading-snug font-medium [&_p]:mt-0 [&_p]:text-2xl"
+      className="mt-8 max-w-[42rem] border-l-2 border-accent pl-6 text-xl leading-snug font-medium tracking-[-0.015em] [&_p]:mt-0 [&_p]:text-xl"
       {...props}
     />
   ),
@@ -65,8 +70,8 @@ export const caseStudyComponents: MDXComponents = {
       alt={alt ?? ""}
       width={1600}
       height={1000}
-      sizes="(min-width: 1200px) 760px, (min-width: 768px) 66vw, 100vw"
-      className="my-4 block h-auto w-full border border-line"
+      sizes="(min-width: 1200px) 672px, (min-width: 768px) 66vw, 100vw"
+      className="window my-8 block h-auto w-full"
     />
   ),
 };

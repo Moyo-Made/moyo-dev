@@ -1,264 +1,678 @@
 @import "tailwindcss";
 
 /*
- * The site is drawn like a technical sheet: drafting paper, ink, one blue
- * annotation colour, and a yellow highlighter. Light by default, blueprint
- * in dark mode. Contrast, checked against WCAG AA:
+ * Light, calm and precise: warm off-white, near-black ink, one restrained
+ * green. Contrast, checked against WCAG AA:
  *
- *   light  ink on paper 17.0 · muted on paper 5.8 · muted on paper-2 5.4
- *          annot on paper 6.4 · annot on paper-2 6.0
- *   dark   ink on paper 15.4 · muted on paper 7.1 · muted on paper-2 6.5
- *          annot on paper 7.8 · annot on paper-2 7.1
- *   both   on-mark on mark 10.1
+ *   ink on canvas 15.2 · muted on canvas 5.6 · muted on surface 6.0
+ *   muted on stage 5.2 · accent-ink on canvas 5.6 · accent-ink on surface 6.0
  *
- * Mark is a highlighter, never a text colour: it only ever sits behind
- * on-mark text, or fills a dot.
+ * `accent` itself (#2f8b65) is 4.2 on white, so it fills dots, rules and
+ * focus rings but never sets small text; `accent-ink` does that.
  */
 :root {
   color-scheme: light;
-  --paper: #f5f6f3;
-  --paper-2: #eceee9;
-  --ink: #121418;
-  --line: #d3d7dc;
-  --grid: rgb(18 20 24 / 0.06);
-  --muted: #586070;
-  --annot: #2443e6;
-  --mark: #f2b705;
-  --on-mark: #121418;
-}
-
-/* Blueprint: the system preference, unless the visitor picked light. The
-   values are repeated for an explicit dark pick below. */
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    color-scheme: dark;
-    --paper: #0c1320;
-    --paper-2: #131c2c;
-    --ink: #e6eaf2;
-    --line: #263248;
-    --grid: rgb(142 162 255 / 0.08);
-    --muted: #94a0b8;
-    --annot: #8ea2ff;
-  }
-}
-:root[data-theme="dark"] {
-  color-scheme: dark;
-  --paper: #0c1320;
-  --paper-2: #131c2c;
-  --ink: #e6eaf2;
-  --line: #263248;
-  --grid: rgb(142 162 255 / 0.08);
-  --muted: #94a0b8;
-  --annot: #8ea2ff;
+  --canvas: #f8f8f5;
+  --surface: #ffffff;
+  --stage: #efefe9;
+  --ink: #20211f;
+  --muted: #64645e;
+  --faint: #cdcdc6;
+  --line: #e6e6e0;
+  --line-strong: #d4d4cc;
+  --accent: #2f8b65;
+  --accent-ink: #24704f;
+  --ease-out-soft: cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
 @theme inline {
-  --color-paper: var(--paper);
-  --color-paper-2: var(--paper-2);
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-stage: var(--stage);
   --color-ink: var(--ink);
-  --color-line: var(--line);
   --color-muted: var(--muted);
-  --color-annot: var(--annot);
-  --color-mark: var(--mark);
-  --color-on-mark: var(--on-mark);
-  --font-display: var(--font-plex-condensed);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --ease-soft: var(--ease-out-soft);
 }
 
-/* `02 — SELECTED WORK` — section labels, captions and table headers. */
-@utility label-mono {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  line-height: 1rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
-/* Max width and side gutters shared by every section. */
+/* Content width: 1160px between 40px gutters on wide screens. */
 @utility shell {
   margin-inline: auto;
   width: 100%;
-  max-width: 75rem;
-  padding-inline: 1rem;
+  max-width: 77.5rem;
+  padding-inline: 1.25rem;
   @media (width >= 48rem) {
     padding-inline: 2rem;
   }
-}
-
-/* Drafting paper: a fine grid with a heavier line every fifth square. */
-@utility bg-grid {
-  background-color: var(--paper);
-  background-image:
-    linear-gradient(var(--grid) 1px, transparent 1px),
-    linear-gradient(90deg, var(--grid) 1px, transparent 1px),
-    linear-gradient(var(--grid) 1px, transparent 1px),
-    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
-  background-size:
-    120px 120px,
-    120px 120px,
-    24px 24px,
-    24px 24px;
-  background-position: -1px -1px;
-}
-
-/* Crop marks in each corner, as around a drawing on a sheet. */
-@utility ticks {
-  --tick: var(--ink);
-  background-image:
-    linear-gradient(var(--tick), var(--tick)),
-    linear-gradient(var(--tick), var(--tick)),
-    linear-gradient(var(--tick), var(--tick)),
-    linear-gradient(var(--tick), var(--tick)),
-    linear-gradient(var(--tick), var(--tick)),
-    linear-gradient(var(--tick), var(--tick)),
-    linear-gradient(var(--tick), var(--tick)),
-    linear-gradient(var(--tick), var(--tick));
-  background-repeat: no-repeat;
-  background-size:
-    12px 1px,
-    1px 12px,
-    12px 1px,
-    1px 12px,
-    12px 1px,
-    1px 12px,
-    12px 1px,
-    1px 12px;
-  background-position:
-    top left,
-    top left,
-    top right,
-    top right,
-    bottom left,
-    bottom left,
-    bottom right,
-    bottom right;
-}
-
-/* A dashed leader line, horizontal or vertical, in the current colour. */
-@utility leader-x {
-  height: 1px;
-  background-image: linear-gradient(90deg, currentColor 55%, transparent 0);
-  background-size: 7px 1px;
-}
-@utility leader-y {
-  width: 1px;
-  background-image: linear-gradient(currentColor 55%, transparent 0);
-  background-size: 1px 7px;
+  @media (width >= 64rem) {
+    padding-inline: 2.5rem;
+  }
 }
 
 html {
   scroll-behavior: smooth;
-  /* Anchored sections clear the fixed bar (and the index strip on mobile). */
-  scroll-padding-top: 6.5rem;
-  @media (width >= 64rem) {
-    scroll-padding-top: 4.5rem;
+  /* Anchored sections clear the sticky bar. */
+  scroll-padding-top: 5rem;
+}
+
+body {
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  font-feature-settings: "ss01", "cv11";
+}
+
+::selection {
+  background: rgb(47 139 101 / 0.18);
+  color: var(--ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+@layer components {
+  /* Buttons: one shape everywhere, 44px tall (36px small), 9px radius. */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    height: 2.75rem;
+    padding-inline: 1.125rem;
+    border-radius: 9px;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    letter-spacing: -0.006em;
+    white-space: nowrap;
+    transition:
+      background-color 200ms var(--ease-out-soft),
+      border-color 200ms var(--ease-out-soft),
+      box-shadow 200ms var(--ease-out-soft),
+      scale 120ms var(--ease-out-soft);
   }
+  .btn:active {
+    scale: 0.98;
+  }
+  .btn-sm {
+    height: 2.25rem;
+    padding-inline: 0.875rem;
+    font-size: 0.875rem;
+    border-radius: 8px;
+  }
+  .btn-primary {
+    background: var(--ink);
+    color: #fafaf7;
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.12),
+      0 1px 2px rgb(32 33 31 / 0.18);
+  }
+  .btn-primary:hover {
+    background: #363733;
+  }
+  .btn-secondary {
+    background: var(--surface);
+    color: var(--ink);
+    border: 1px solid var(--line);
+    box-shadow: 0 1px 2px rgb(32 33 31 / 0.04);
+  }
+  .btn-secondary:hover {
+    border-color: var(--line-strong);
+    box-shadow: 0 2px 6px -1px rgb(32 33 31 / 0.08);
+  }
+
+  /* Icons inside links and buttons nudge toward where they go. */
+  .nudge-down,
+  .nudge-out,
+  .nudge-left {
+    transition: translate 250ms var(--ease-out-soft);
+  }
+  :is(a, button):hover .nudge-down {
+    translate: 0 2px;
+  }
+  :is(a, button):hover .nudge-out {
+    translate: 1.5px -1.5px;
+  }
+  :is(a, button):hover .nudge-left {
+    translate: -2px 0;
+  }
+
+  /* A text link: hairline underline that darkens on hover. */
+  .link {
+    text-decoration-line: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.22em;
+    text-decoration-color: var(--line-strong);
+    transition:
+      text-decoration-color 200ms var(--ease-out-soft),
+      color 200ms var(--ease-out-soft);
+  }
+  .link:hover {
+    text-decoration-color: currentColor;
+  }
+
+  /* A product screenshot in a minimal browser window. */
+  .window {
+    overflow: hidden;
+    border-radius: 10px;
+    background: var(--surface);
+    box-shadow:
+      0 0 0 1px rgb(32 33 31 / 0.07),
+      0 1px 2px rgb(32 33 31 / 0.05),
+      0 12px 32px -12px rgb(32 33 31 / 0.18);
+    transition: box-shadow 500ms var(--ease-out-soft);
+  }
+  .window-raised,
+  .lift:hover .window {
+    box-shadow:
+      0 0 0 1px rgb(32 33 31 / 0.08),
+      0 2px 4px rgb(32 33 31 / 0.06),
+      0 24px 48px -16px rgb(32 33 31 / 0.28);
+  }
+
+  /* A product stage: lit from above, with a hairline inner edge, so the
+     screens sit on a surface rather than in a flat grey box. Clipped, not
+     hidden: see the note on scroll-linked motion below. */
+  .stage {
+    overflow: clip;
+    border-radius: 1rem;
+    background:
+      radial-gradient(90% 70% at 50% 0%, rgb(255 255 255 / 0.75), transparent 70%),
+      linear-gradient(var(--stage), #ebebe4);
+    box-shadow:
+      inset 0 0 0 1px rgb(32 33 31 / 0.05),
+      inset 0 1px 0 rgb(255 255 255 / 0.9);
+  }
+
+  /* The home page's hero: the product stack sits beside the copy on wide
+     screens, under it on small ones. */
+  @media (width >= 64rem) {
+    .hero-split {
+      display: grid;
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+      column-gap: 3rem;
+      align-items: center;
+    }
+  }
+
+  /* "Teams I've built software with": hairlines between cells, each row's
+     first cell flush with the content edge. */
+  .strip > li {
+    padding: 1.25rem 1rem 1.25rem 1.25rem;
+  }
+  .strip > li:nth-child(2n + 1) {
+    padding-left: 0;
+  }
+  @media (width >= 40rem) {
+    .strip > li:nth-child(2n + 1) {
+      padding-left: 1.25rem;
+    }
+    .strip > li:nth-child(3n + 1) {
+      padding-left: 0;
+    }
+  }
+  @media (width >= 64rem) {
+    .strip > li:nth-child(3n + 1) {
+      padding-left: 1.25rem;
+    }
+    .strip > li:first-child {
+      padding-left: 0;
+    }
+  }
+}
+
+/* ── Panels, labels, tiles and the work showcase ──────────────────────
+   The lit panel opens every page (and the footer closes it); everything
+   between stays plain. Labels, corner marks and dotted leaders are the
+   small details that carry the same precision through. */
+@layer components {
+  /* ── The panel: a rounded, inset surface lit from within ──────────────── */
+
+  .panel {
+    position: relative;
+    overflow: clip;
+    isolation: isolate;
+    border-radius: 1.75rem;
+    background: linear-gradient(180deg, #eef1ec 0%, #f4f5f1 55%, #f6f6f2 100%);
+    box-shadow:
+      inset 0 0 0 1px rgb(32 33 31 / 0.06),
+      inset 0 1px 0 rgb(255 255 255 / 0.8);
+  }
+
+  /* Three soft lights that drift slowly, so the panel feels lit rather than
+     painted. Radial gradients, not blurred elements: nothing to repaint. */
+  .panel-light {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+  }
+  .panel-light > span {
+    position: absolute;
+    border-radius: 50%;
+    animation: light-drift 22s ease-in-out infinite alternate;
+  }
+  .panel-light > span:nth-child(1) {
+    width: 70%;
+    aspect-ratio: 1;
+    right: -12%;
+    top: -30%;
+    background: radial-gradient(closest-side, rgb(47 139 101 / 0.22), transparent);
+  }
+  .panel-light > span:nth-child(2) {
+    width: 55%;
+    aspect-ratio: 1;
+    left: -15%;
+    bottom: -40%;
+    background: radial-gradient(closest-side, rgb(150 205 178 / 0.45), transparent);
+    animation-duration: 28s;
+    animation-direction: alternate-reverse;
+  }
+  .panel-light > span:nth-child(3) {
+    width: 45%;
+    aspect-ratio: 1;
+    left: 30%;
+    top: 5%;
+    background: radial-gradient(closest-side, rgb(255 255 255 / 0.85), transparent);
+    animation-duration: 18s;
+  }
+  @keyframes light-drift {
+    from {
+      translate: 0 0;
+    }
+    to {
+      translate: -6% 8%;
+    }
+  }
+
+  /* A faint measuring grid, fading out from the centre. */
+  .panel-grid {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-image:
+      linear-gradient(rgb(32 33 31 / 0.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(32 33 31 / 0.045) 1px, transparent 1px);
+    background-size: 72px 72px;
+    background-position: center top;
+    mask-image: radial-gradient(75% 70% at 50% 35%, #000 20%, transparent 80%);
+  }
+
+  /* ── Corner marks: a small + at each corner of a frame ───────────────── */
+
+  .corner {
+    position: absolute;
+    width: 11px;
+    height: 11px;
+    color: var(--line-strong);
+    pointer-events: none;
+    background:
+      linear-gradient(currentColor, currentColor) center / 1px 100% no-repeat,
+      linear-gradient(currentColor, currentColor) center / 100% 1px no-repeat;
+  }
+
+  /* ── Section labels: 01 ▨ Work ──────────────────────────────────────── */
+
+  .section-label {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    font-family: var(--font-geist-mono), ui-monospace, monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .section-label-num {
+    display: inline-grid;
+    place-items: center;
+    min-width: 1.75rem;
+    height: 1.375rem;
+    padding-inline: 0.25rem;
+    border: 1px solid var(--line-strong);
+    border-radius: 4px;
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+  }
+  .hatch {
+    width: 0.875rem;
+    height: 0.875rem;
+    border-radius: 2px;
+    background: repeating-linear-gradient(-45deg, var(--line-strong) 0 1px, transparent 1px 4px);
+  }
+  .section-label::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+  }
+
+  /* ── Dotted leaders: title ······ date ──────────────────────────────── */
+
+  .leader {
+    flex: 1;
+    min-width: 1.5rem;
+    margin-inline: 0.75rem;
+    align-self: center;
+    background: radial-gradient(circle, rgb(100 100 94 / 0.55) 0.7px, transparent 1px) 0 0 / 5px 2px
+      repeat-x;
+    height: 2px;
+  }
+
+  /* ── Showcase: one frame, turning between projects like pages ───────── */
+
+  .turn-pages {
+    position: relative;
+    perspective: 2400px;
+  }
+  .turn-page {
+    position: absolute;
+    inset: 0;
+    transform-origin: left center;
+    backface-visibility: hidden;
+    visibility: hidden;
+  }
+  .turn-page[data-state="active"] {
+    visibility: visible;
+    z-index: 1;
+    animation: page-settle 900ms var(--ease-out-soft) both;
+  }
+  .turn-page[data-state="leaving"] {
+    visibility: visible;
+    z-index: 2;
+    animation: page-turn 900ms cubic-bezier(0.55, 0.05, 0.3, 1) both;
+  }
+  /* The leaving page darkens as it turns away, as paper does. */
+  .turn-page[data-state="leaving"]::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(90deg, rgb(32 33 31 / 0), rgb(32 33 31 / 0.22));
+    animation: page-shade 900ms ease-in both;
+  }
+  @keyframes page-turn {
+    from {
+      transform: rotateY(0deg);
+    }
+    to {
+      transform: rotateY(-96deg);
+    }
+  }
+  @keyframes page-shade {
+    from {
+      opacity: 0;
+    }
+  }
+  @keyframes page-settle {
+    from {
+      transform: scale(0.97);
+      filter: brightness(0.94);
+    }
+  }
+
+  /* Tab progress: fills while a project is on show. */
+  .tab-progress {
+    transform-origin: left;
+    scale: 0 1;
+  }
+  .tab-progress[data-running="true"] {
+    animation: tab-fill var(--dur, 7000ms) linear both;
+  }
+  .tab-progress[data-running="paused"] {
+    animation: tab-fill var(--dur, 7000ms) linear both;
+    animation-play-state: paused;
+  }
+  .tab-progress[data-running="done"] {
+    scale: 1 1;
+  }
+  @keyframes tab-fill {
+    to {
+      scale: 1 1;
+    }
+  }
+
+  /* Project details swap with a short rise. */
+  .swap {
+    animation: swap-in 600ms var(--ease-out-soft) both;
+  }
+  @keyframes swap-in {
+    from {
+      opacity: 0;
+      translate: 0 10px;
+    }
+  }
+
+  /* ── Tiles: Bambu-style, words top-left, the screen bleeding off the edge */
+
+  .tile {
+    position: relative;
+    overflow: clip;
+    isolation: isolate;
+    border-radius: 1.25rem;
+    background:
+      radial-gradient(80% 60% at 30% 0%, rgb(255 255 255 / 0.7), transparent 70%),
+      linear-gradient(var(--stage), #e9e9e2);
+    box-shadow:
+      inset 0 0 0 1px rgb(32 33 31 / 0.05),
+      inset 0 1px 0 rgb(255 255 255 / 0.9);
+  }
+  .tile-shot {
+    translate: 0 12%;
+    transition:
+      translate 600ms var(--ease-out-soft),
+      box-shadow 600ms var(--ease-out-soft);
+  }
+  .tile:hover .tile-shot {
+    translate: 0 calc(12% - 8px);
+  }
+
+  /* ── Case study: numbered section headings ──────────────────────────── */
+
+  .numbered-sections {
+    counter-reset: section;
+  }
+  .numbered-sections h2[id] {
+    counter-increment: section;
+  }
+  .numbered-sections h2[id]::before {
+    content: counter(section, decimal-leading-zero);
+    display: block;
+    margin-bottom: 0.875rem;
+    font-family: var(--font-geist-mono), ui-monospace, monospace;
+    font-size: 0.75rem;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    color: var(--accent-ink);
+  }
+}
+
+/* ── Motion ────────────────────────────────────────────────────────────── */
+
+/* Page load: the hero's lines rise and come into focus, once. */
+@keyframes rise {
+  from {
+    opacity: 0;
+    translate: 0 14px;
+    filter: blur(6px);
+  }
+}
+.rise {
+  animation: rise 0.9s var(--ease-out-soft) both;
+  animation-delay: var(--d, 0ms);
+}
+
+/*
+ * Scroll-linked motion. Each effect is tied to scroll position rather than
+ * played on a timer, so it moves exactly as fast as the reader does and
+ * stops when they stop. Where the browser has no scroll-driven animation
+ * (Firefox today) everything simply shows in its final state.
+ *
+ * view() follows the nearest scroll container, and `overflow: hidden`
+ * makes one. Anything animated here must sit under `overflow: clip`
+ * instead, or its animation freezes.
+ */
+@keyframes arrive {
+  from {
+    opacity: 0;
+    translate: 0 14px;
+  }
+}
+@keyframes ink-in {
+  from {
+    color: var(--faint);
+  }
+}
+@keyframes drift {
+  from {
+    translate: 0 var(--drift);
+  }
+  to {
+    translate: 0 calc(var(--drift) * -1);
+  }
+}
+@keyframes fan {
+  to {
+    translate: var(--fx, 0) var(--fy, 0);
+  }
+}
+@keyframes grow-y {
+  from {
+    scale: 1 0;
+  }
+}
+@keyframes grow-x {
+  from {
+    scale: 0 1;
+  }
+}
+@keyframes dot-on {
+  from {
+    background-color: var(--line-strong);
+    box-shadow: 0 0 0 1px var(--line-strong);
+  }
+}
+
+@supports (animation-timeline: view()) {
+  /* Blocks ease in as they arrive; list rows each on their own, so a list
+     arrives one row at a time. */
+  .arrive {
+    animation: arrive linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 10rem;
+  }
+
+  /* Statements ink in word by word as each line rises from the bottom
+     of the screen to just past the middle. */
+  .ink-in {
+    animation: ink-in linear both;
+    animation-timeline: view();
+    animation-range: cover 12% cover 38%;
+  }
+
+  /* Product screens drift against their stage, the front one further, so
+     the stage reads as having depth. */
+  .drift {
+    --drift: 8px;
+    animation: drift linear both;
+    animation-timeline: view();
+    animation-range: cover 0% cover 100%;
+  }
+  .drift-near {
+    --drift: 14px;
+  }
+  @media (width >= 40rem) {
+    .drift {
+      --drift: 12px;
+    }
+    .drift-near {
+      --drift: 30px;
+    }
+  }
+
+  /* The hero's stack fans apart a little as the page scrolls away. */
+  .fan {
+    animation: fan linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0 70vh;
+  }
+
+  /* How I work: the rail draws, and each step's dot lights as the line
+     reaches it. Down the side on small screens, across on wide ones. */
+  .rail {
+    transform-origin: top;
+    animation: grow-y linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 100%;
+  }
+  .rail-dot {
+    animation: dot-on linear both;
+    animation-timeline: view();
+    animation-range: cover 22% cover 28%;
+  }
+  @media (width >= 64rem) {
+    .rail {
+      transform-origin: left;
+      animation-name: grow-x;
+      animation-range: cover 5% cover 50%;
+    }
+    .rail-dot {
+      animation-range: cover calc(5% + var(--i) * 9%) cover calc(8% + var(--i) * 9%);
+    }
+  }
+}
+
+/* The mobile menu opens by growing its row from 0 to its content height. */
+.menu-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    grid-template-rows 320ms var(--ease-out-soft),
+    opacity 200ms var(--ease-out-soft),
+    visibility 0s linear 320ms;
+}
+.menu-panel[data-open="true"] {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  visibility: visible;
+  transition:
+    grid-template-rows 320ms var(--ease-out-soft),
+    opacity 200ms var(--ease-out-soft);
 }
 
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
+  .rise,
+  .arrive,
+  .ink-in,
+  .drift,
+  .fan,
+  .rail,
+  .rail-dot,
+  .panel-light > span,
+  .turn-page[data-state],
+  .turn-page[data-state]::after,
+  .swap {
+    animation: none;
+  }
+  .turn-page[data-state="leaving"] {
+    visibility: hidden;
+  }
   *,
   *::before,
   *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
-}
-
-/* Leader lines draw in from the side they point away from. */
-@keyframes draw-x {
-  from {
-    scale: 0 1;
-  }
-}
-@keyframes draw-y {
-  from {
-    scale: 1 0;
-  }
-}
-@keyframes settle {
-  from {
-    opacity: 0;
-    translate: 0 0.5rem;
-  }
-}
-.draw-x {
-  animation: draw-x 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
-  animation-delay: var(--d, 0ms);
-}
-.draw-y {
-  transform-origin: top;
-  animation: draw-y 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
-  animation-delay: var(--d, 0ms);
-}
-.settle {
-  animation: settle 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both;
-  animation-delay: var(--d, 0ms);
-}
-
-/* The flow diagram's connectors draw as they scroll into view, where the
-   browser supports scroll-driven animations. Elsewhere they're just there. */
-@supports (animation-timeline: view()) {
-  .draw-on-view {
-    animation: draw-x linear both;
-    animation-timeline: view();
-    animation-range: entry 20% cover 35%;
-  }
-  .draw-on-view-y {
-    transform-origin: top;
-    animation: draw-y linear both;
-    animation-timeline: view();
-    animation-range: entry 20% cover 35%;
-  }
-  /* Sections settle in as they arrive, like the hero does on load. The range
-     is a fixed length so tall blocks are fully in before they're read. */
-  .settle-on-view {
-    animation: settle cubic-bezier(0.2, 0.7, 0.2, 1) both;
-    animation-timeline: view();
-    animation-range: entry 0% entry 10rem;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .draw-x,
-  .draw-y,
-  .settle,
-  .settle-on-view,
-  .draw-on-view,
-  .draw-on-view-y {
-    animation: none;
-  }
-}
-
-/* README references: the marker after a phrase and its sidenote share a
-   number, counted in document order. */
-.refs {
-  counter-reset: ref;
-}
-.ref-mark {
-  counter-increment: ref;
-}
-.ref-mark::after,
-.ref-num::before {
-  content: "[" counter(ref) "]";
-}
-
-body {
-  background: var(--paper);
-  color: var(--ink);
-  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
-}
-
-::selection {
-  background: var(--mark);
-  color: var(--on-mark);
-}
-
-:focus-visible {
-  outline: 2px solid var(--annot);
-  outline-offset: 3px;
 }

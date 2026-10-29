@@ -1,140 +1,84 @@
-import { site } from "@/data/site";
-import { SectionHeader } from "@/components/section";
-
-const links = [
-  { label: "GitHub", href: site.socials.github },
-  { label: "LinkedIn", href: site.socials.linkedin },
-  { label: "X", href: site.socials.x },
-];
-
-/** Subject and body the email opens with, so nobody starts from a blank page. */
-const subject = "Let's work together";
-const prompts = ["We're building", "The hard part is", "Timeline:"];
-const mailto = `mailto:${site.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(
-  `Hi ${site.shortName},\n\n${prompts.map((p) => `${p} `).join("\n")}\n`,
-)}`;
+import { mailto, site } from "@/data/site";
+import { Words } from "@/components/statement";
+import { CopyEmail } from "@/components/copy-email";
+import { ArrowUpRight } from "@/components/icons";
+import { Eyebrow, Panel } from "@/components/panel";
 
 /**
- * `06 — CONTACT`: one question, then the sheet's title block — the
- * boxed corner of an engineering drawing that says who drew it and where
- * else to find them.
+ * Every page closes here, on the same lit panel it opens with: one
+ * question, and the address itself set large enough to be the thing you
+ * remember. It opens a pre-filled email; the button beside it copies the
+ * address for anyone without a mail app set up.
  */
 export function SiteFooter() {
-  const cell = "border-r border-b border-ink p-4";
-  const term = "label-mono text-muted";
-
   return (
-    <footer id="contact" aria-labelledby="contact-label" className="bg-grid">
-      <div className="shell pt-20 pb-10 md:pt-28">
-        <SectionHeader
-          id="contact"
-          caption={
-            site.availableForRoles ? "Open to frontend roles" : undefined
-          }
-        />
+    <footer id="contact" aria-labelledby="contact-title" className="pt-16 md:pt-24">
+      <Panel>
+        <div className="shell pt-20 pb-10 md:pt-28 md:pb-12">
+          <Eyebrow live>Open to freelance work and remote roles</Eyebrow>
+          <h2
+            id="contact-title"
+            className="mt-8 max-w-[16ch] text-[clamp(2.5rem,1.4rem+4.4vw,4.75rem)] leading-[1.03] font-semibold tracking-[-0.045em] text-balance"
+          >
+            <Words text="Have something in mind? Let’s build it." />
+          </h2>
+          <p className="mt-7 max-w-[36rem] text-lg leading-relaxed text-pretty text-muted md:text-xl md:leading-relaxed">
+            Whether you&rsquo;re starting something new or improving an existing product, I&rsquo;d
+            love to hear what you&rsquo;re working on.
+          </p>
 
-        <div className="mt-10 grid grid-cols-[minmax(0,1fr)] items-center gap-x-16 gap-y-12 md:mt-14 lg:grid-cols-[minmax(0,1fr)_22rem]">
-          <div>
-            <p className="max-w-4xl font-display text-[clamp(2.5rem,6vw,5rem)] leading-[0.95] font-semibold tracking-[-0.02em] text-balance">
-              Building something complicated? Let&rsquo;s make it feel simple.
-            </p>
-            <p className="mt-8 max-w-2xl text-xl leading-relaxed text-muted text-pretty md:text-2xl">
-              Hiring for a frontend role, or need a product built? Send me what
-              you&rsquo;re working on and the part that&rsquo;s hardest to get
-              right. I&rsquo;ll write back with how I&rsquo;d approach it.
-            </p>
-            <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-4">
-              <a
-                href={mailto}
-                className="label-mono inline-flex items-center gap-3 bg-ink px-5 py-4 text-paper transition-colors hover:bg-annot"
-              >
-                Email me <span aria-hidden>→</span>
+          <div className="mt-14 flex flex-col gap-5 border-t border-ink/10 pt-8 md:mt-20 md:flex-row md:items-center md:justify-between">
+            <a
+              href={mailto}
+              className="group w-fit text-[clamp(1.75rem,1rem+3.2vw,3.25rem)] leading-none font-medium tracking-[-0.035em] break-all"
+            >
+              <span className="bg-[linear-gradient(currentColor,currentColor)] bg-[length:0%_2px] bg-[position:0_100%] bg-no-repeat pb-1.5 transition-[background-size] duration-500 ease-soft group-hover:bg-[length:100%_2px] group-focus-visible:bg-[length:100%_2px]">
+                {site.email}
+              </span>
+            </a>
+            <div className="flex flex-wrap items-center gap-3">
+              <CopyEmail />
+              <a href={mailto} className="btn btn-primary">
+                Email me
               </a>
-              <p className="label-mono text-muted">
-                Recently shipped: Social Shake · Gixel
-              </p>
             </div>
           </div>
 
-          <EmailDraft />
+          <ul className="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-[0.9375rem] text-muted">
+            {(
+              [
+                ["LinkedIn", site.socials.linkedin],
+                ["GitHub", site.socials.github],
+                ["X", site.socials.x],
+              ] as const
+            ).map(([label, href]) => (
+              <li key={label}>
+                <a
+                  href={href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-1 transition-colors hover:text-ink"
+                >
+                  {label}
+                  <ArrowUpRight className="nudge-out size-4" />
+                </a>
+              </li>
+            ))}
+            <li>
+              Based in {site.location} ({site.timeZone}), working remotely.
+            </li>
+          </ul>
         </div>
+      </Panel>
 
-        <dl className="mt-16 grid grid-cols-2 border-t border-l border-ink bg-paper md:grid-cols-4">
-          <div className={`${cell} col-span-2`}>
-            <dt className={term}>Drawn by</dt>
-            <dd className="mt-2 font-display text-2xl font-semibold tracking-tight">
-              {site.name}
-            </dd>
-          </div>
-          <div className={cell}>
-            <dt className={term}>Elsewhere</dt>
-            <dd className="mt-2">
-              <ul className="flex flex-wrap gap-x-5 gap-y-1">
-                {links.map((l) => (
-                  <li key={l.label}>
-                    <a
-                      href={l.href}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="hover:text-annot"
-                    >
-                      {l.label} <span className="text-annot">↗</span>
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </dd>
-          </div>
-          <div className={cell}>
-            <dt className={term}>Page</dt>
-            <dd className="mt-2">
-              <a href="#top" className="hover:text-annot">
-                Back to top <span className="text-annot">↑</span>
-              </a>
-            </dd>
-          </div>
-        </dl>
+      <div className="shell flex flex-col gap-3 py-8 text-sm text-muted sm:flex-row sm:justify-between">
+        <p>
+          {site.name}, {site.role.toLowerCase()}.
+        </p>
+        <a href="#top" className="w-fit transition-colors hover:text-ink">
+          Back to top
+        </a>
       </div>
     </footer>
-  );
-}
-
-/**
- * A compose window with the blanks showing: what to send, at a glance.
- * The whole card opens the same pre-filled email as the button.
- */
-function EmailDraft() {
-  const row = "flex gap-3 border-b border-line py-2";
-
-  return (
-    <a
-      href={mailto}
-      aria-label={`Email ${site.shortName} with a pre-filled draft`}
-      className="group ticks block bg-paper-2 p-5 font-mono text-sm leading-relaxed transition-colors hover:bg-paper"
-    >
-      <p className="label-mono text-annot">New message</p>
-      <div aria-hidden className="mt-3">
-        <p className={row}>
-          <span className="text-muted">To</span>
-          <span className="truncate">{site.email}</span>
-        </p>
-        <p className={row}>
-          <span className="text-muted">Subject</span>
-          <span>{subject}</span>
-        </p>
-        <div className="space-y-2 pt-4">
-          <p>Hi {site.shortName},</p>
-          {prompts.map((p) => (
-            <p key={p} className="flex items-baseline gap-2">
-              <span className="shrink-0">{p}</span>
-              <span className="h-px flex-1 translate-y-[-0.2em] bg-annot" />
-            </p>
-          ))}
-        </div>
-        <p className="label-mono mt-6 text-right group-hover:text-annot">
-          Send <span className="text-annot">→</span>
-        </p>
-      </div>
-    </a>
   );
 }

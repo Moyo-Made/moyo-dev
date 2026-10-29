@@ -1,8 +1,8 @@
 import { ImageResponse } from "next/og";
 import { site } from "@/data/site";
-import { OgFooter, OgLabel, ogColors, ogFonts, ogGrid, ogSize } from "@/lib/og";
+import { OgEyebrow, OgFooter, ogColors, ogFonts, ogFrame, ogSize } from "@/lib/og";
 
-export const alt = `${site.name}, ${site.role} — ${site.tagline}`;
+export const alt = `${site.name}, ${site.role}. ${site.hero.headline.join(" ")}`;
 export const size = ogSize;
 export const contentType = "image/png";
 
@@ -10,45 +10,37 @@ export const contentType = "image/png";
 export default async function Image() {
   return new ImageResponse(
     (
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
-          width: "100%",
-          height: "100%",
-          padding: "72px 80px 56px",
-          ...ogGrid,
-          color: ogColors.ink,
-        }}
-      >
+      <div style={ogFrame}>
         <div style={{ display: "flex", flexDirection: "column" }}>
-          <OgLabel fig={site.name}>Portfolio</OgLabel>
+          <OgEyebrow>{site.hero.eyebrow}</OgEyebrow>
           <div
             style={{
-              marginTop: 40,
-              fontFamily: "IBM Plex Sans Condensed",
-              fontSize: 120,
-              lineHeight: 0.92,
-              letterSpacing: "-0.025em",
+              display: "flex",
+              flexDirection: "column",
+              marginTop: 44,
+              fontSize: 104,
+              fontWeight: 600,
+              lineHeight: 1.02,
+              letterSpacing: "-0.045em",
             }}
           >
-            {site.role}
+            {site.hero.headline.map((line) => (
+              <span key={line}>{line}</span>
+            ))}
           </div>
           <div
             style={{
-              marginTop: 24,
-              maxWidth: 820,
-              fontFamily: "Geist",
-              fontSize: 32,
-              lineHeight: 1.3,
+              marginTop: 32,
+              maxWidth: 1040,
+              fontSize: 30,
+              lineHeight: 1.4,
               color: ogColors.muted,
             }}
           >
-            {site.tagline}
+            Web products, SaaS features and AI integrations for founders and teams.
           </div>
         </div>
-        <OgFooter left={site.availableForRoles ? "Available for roles" : "Building"} />
+        <OgFooter />
       </div>
     ),
     { ...size, fonts: ogFonts },

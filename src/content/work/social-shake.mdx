@@ -10,7 +10,7 @@ An Australian client hired me to replace all of that with one product. I built S
 
 ## What made it hard
 
-It isn't one app, it's three, sharing one set of data:
+It isn’t one app, it’s three, sharing one set of data:
 
 - **Brands** write briefs, invite creators or open the brief to everyone, approve or send back videos, and pay.
 - **Creators** verify their identity, connect TikTok, apply, deliver, revise, and get paid out.
@@ -20,17 +20,17 @@ Every brief turns into orders that move through a lifecycle (pending, in progres
 
 ## How I built it
 
-**A brief in four steps.** Writing a good brief is the hardest part for a brand, so I split it into Project Details, Content Requirements, Creator & Pricing, and Review & Publish. Each step asks only what it needs. The first is just a name, a project type (raw UGC, creator-posted, or Spark Ads) and what's being promoted. The second covers content type, platforms, aspect ratio, duration, and whose script to follow.
+**A brief in four steps.** Writing a good brief is the hardest part for a brand, so I split it into Project Details, Content Requirements, Creator & Pricing, and Review & Publish. Each step asks only what it needs. The first is just a name, a project type (raw UGC, creator-posted, or Spark Ads) and what’s being promoted. The second covers content type, platforms, aspect ratio, duration, and whose script to follow.
 
 ![Step two of the brief: content type, platforms, aspect ratio, duration and script.](/images/work/social-shake-brief-requirements.png)
 
 The Creator & Pricing step shows a live estimate (creators × videos per creator) next to the picker, so the brand sees the cost before they commit, along with the line that matters most: *you only pay for approved videos*.
 
-**Escrow, then payouts.** At checkout the brand's card is authorised but not charged: the Stripe payment is created with manual capture and the order sits at `pending_capture`. When the brand approves the video, the payment is captured and the creator's share goes to their own Stripe Connect account. If the brand rejects it, the payment is cancelled and the hold on their card disappears. If they want changes instead, the order goes to `revision_requested` and the creator resubmits, with every round kept in the submission's history.
+**Escrow, then payouts.** At checkout the brand’s card is authorised but not charged: the Stripe payment is created with manual capture and the order sits at `pending_capture`. When the brand approves the video, the payment is captured and the creator’s share goes to their own Stripe Connect account. If the brand rejects it, the payment is cancelled and the hold on their card disappears. If they want changes instead, the order goes to `revision_requested` and the creator resubmits, with every round kept in the submission’s history.
 
 ![Brand notifications: an accepted invitation, and two orders held in escrow until delivery is confirmed.](/images/work/social-shake-escrow.png)
 
-**Big videos through small pipes.** The app runs on Vercel, where a single request can't carry a 100MB video. So uploads go up in 1MB chunks and are reassembled in Firebase Storage.
+**Big videos through small pipes.** The app runs on Vercel, where a single request can’t carry a 100MB video. So uploads go up in 1MB chunks and are reassembled in Firebase Storage.
 
 **Live updates.** Next.js runs inside a custom Node server so Socket.io can share its port. Each conversation, brand and creator gets a room, so messages, delivery updates and verification decisions appear on the other side without a refresh.
 
@@ -38,7 +38,7 @@ The Creator & Pricing step shows a live estimate (creators × videos per creator
 
 The big call was **authorise now, charge on approval**, instead of charging the brand up front. Charging at checkout is simpler, but then a rejected video means chasing a refund, and nothing protects the brand if the video never arrives. The whole pitch of the product is that neither side has to trust the other first.
 
-With a card authorisation, the creator can see the money is really there before they start filming, and the brand isn't charged until they've seen the result. Rejection becomes a cancelled hold, not a refund. The cost is complexity: every order needs explicit payment states, approval has to be the only thing that captures money, and Stripe webhooks have to be safe to receive twice, so each event is recorded and skipped if it's already been processed. In exchange, "you only pay for approved videos" is something the product enforces, not just a sentence on the pricing page.
+With a card authorisation, the creator can see the money is really there before they start filming, and the brand isn’t charged until they’ve seen the result. Rejection becomes a cancelled hold, not a refund. The cost is complexity: every order needs explicit payment states, approval has to be the only thing that captures money, and Stripe webhooks have to be safe to receive twice, so each event is recorded and skipped if it’s already been processed. In exchange, “you only pay for approved videos” is something the product enforces, not just a sentence on the pricing page.
 
 {/* TODO(moyo): if you remember a real moment where escrow saved a brand or a creator (a late delivery, a disputed video), one sentence here makes this beat land. */}
 
@@ -48,10 +48,10 @@ Social Shake is live, with 500+ creators on the platform and brands running proj
 
 {/* TODO(moyo): add any other number you can share: brands signed up, projects posted, videos approved, payouts processed. */}
 
-## What I'd do differently
+## What I’d do differently
 
-Card authorisations don't last forever. Stripe holds them for about a week, and nothing in the flow accounts for a creator who takes longer than that, or for a revision round that pushes approval past the deadline. Given another pass, I'd charge up front for longer projects, hold the funds in the platform's balance, and transfer them on approval. That keeps the same promise without the clock.
+Card authorisations don’t last forever. Stripe holds them for about a week, and nothing in the flow accounts for a creator who takes longer than that, or for a revision round that pushes approval past the deadline. Given another pass, I’d charge up front for longer projects, hold the funds in the platform’s balance, and transfer them on approval. That keeps the same promise without the clock.
 
-Money also moves from more places than it should. Transfers to creators are created in four different routes (order release, contest payouts, creator withdrawals and a payouts job), and none of them pass Stripe an idempotency key. I'd put every transfer behind one payments service with idempotency keys, so a retried request could never pay a creator twice.
+Money also moves from more places than it should. Transfers to creators are created in four different routes (order release, contest payouts, creator withdrawals and a payouts job), and none of them pass Stripe an idempotency key. I’d put every transfer behind one payments service with idempotency keys, so a retried request could never pay a creator twice.
 
 {/* TODO(moyo): confirm these, or swap in what you'd actually change. It's stronger in your words. */}

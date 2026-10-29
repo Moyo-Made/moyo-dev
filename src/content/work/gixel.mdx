@@ -2,33 +2,33 @@
 
 ## The problem
 
-A fashion brand doesn't need one photo of a product. It needs a clean studio shot for the store, the product on a model, a lifestyle scene for social, a close-up of the fabric, and something for ads. Shooting all of that for every product, every season, is slow and expensive.
+A fashion brand doesn’t need one photo of a product. It needs a clean studio shot for the store, the product on a model, a lifestyle scene for social, a close-up of the fabric, and something for ads. Shooting all of that for every product, every season, is slow and expensive.
 
-Gixel does it from one photo. Upload a flat-lay or paste a product link, pick a campaign, and a few minutes later you have a set of ready-to-post images. I'm the lead web engineer: I built the web app and the backend it runs on. The iOS app is built separately and reads the same data.
+Gixel does it from one photo. Upload a flat-lay or paste a product link, pick a campaign, and a few minutes later you have a set of ready-to-post images. I’m the lead web engineer: I built the web app and the backend it runs on. The iOS app is built separately and reads the same data.
 
 ## What made it hard
 
 The demo is one upload and one result. Underneath, three things fight you:
 
-- **Generation is slow and unreliable.** A campaign is several image-model calls, each taking tens of seconds, and some fail. You can't hold a web request open while that happens, and you can't pretend the failures away.
+- **Generation is slow and unreliable.** A campaign is several image-model calls, each taking tens of seconds, and some fail. You can’t hold a web request open while that happens, and you can’t pretend the failures away.
 - **Every call costs money.** Users pay in credits, so the numbers have to be right: quoted before upload, charged once, and refunded exactly once when something breaks on our side.
 - **Two apps, one library.** Web and iOS read and write the same projects, so whatever the web app produces has to land where the iOS app expects it.
 
 ## How I built it
 
-**A queue, not a request.** Starting a campaign writes one job per shot to Firestore and hands each one to a worker through Google Cloud Tasks. The worker is a separate service on Cloud Run. Because it's publicly reachable, every task carries a signed OIDC token for the app's service account, and the worker refuses anything else. The browser just watches the job documents and shows each shot as it lands.
+**A queue, not a request.** Starting a campaign writes one job per shot to Firestore and hands each one to a worker through Google Cloud Tasks. The worker is a separate service on Cloud Run. Because it’s publicly reachable, every task carries a signed OIDC token for the app’s service account, and the worker refuses anything else. The browser just watches the job documents and shows each shot as it lands.
 
-**Credits that add up.** Every operation has a price in credits, and prices are set per operation, never per model, so switching the model behind a feature can't change what a customer pays. The campaign page quotes the cost before anything is uploaded. When a job fails on our side, the worker hands the credit back, and every refund is keyed to the charge it reverses, with a marker document, so a credit can only come back once.
+**Credits that add up.** Every operation has a price in credits, and prices are set per operation, never per model, so switching the model behind a feature can’t change what a customer pays. The campaign page quotes the cost before anything is uploaded. When a job fails on our side, the worker hands the credit back, and every refund is keyed to the charge it reverses, with a marker document, so a credit can only come back once.
 
-**Stalls, handled on the server.** Sometimes a job is queued and never picked up. The browser is the only thing watching that run, so it's the one that notices, but it isn't trusted to decide. The timeout endpoint re-checks everything against the stored jobs, measuring age from the oldest unsettled shot, so a client that calls it too early gets a 409 instead of a free cancel. Timed-out jobs are marked failed, so nothing spins forever in Projects, and refunded.
+**Stalls, handled on the server.** Sometimes a job is queued and never picked up. The browser is the only thing watching that run, so it’s the one that notices, but it isn’t trusted to decide. The timeout endpoint re-checks everything against the stored jobs, measuring age from the oldest unsettled shot, so a client that calls it too early gets a 409 instead of a free cancel. Timed-out jobs are marked failed, so nothing spins forever in Projects, and refunded.
 
-**One store for two apps.** A web run lives in its jobs until it settles. Then a finalize step copies the results into the project layout the iOS app reads. It's idempotent: the project's ID comes from the run's group ID and is created only once, so running finalize twice can't make a duplicate.
+**One store for two apps.** A web run lives in its jobs until it settles. Then a finalize step copies the results into the project layout the iOS app reads. It’s idempotent: the project’s ID comes from the run’s group ID and is created only once, so running finalize twice can’t make a duplicate.
 
 ## The decision
 
-The big call was **moving generation out of the Next.js app** into its own worker behind a queue. Generating inside an API route is simpler, but it's bound by serverless time limits, a retry means the user starts over, and one slow model call ties up a request for its whole duration.
+The big call was **moving generation out of the Next.js app** into its own worker behind a queue. Generating inside an API route is simpler, but it’s bound by serverless time limits, a retry means the user starts over, and one slow model call ties up a request for its whole duration.
 
-With a queue, the app stays fast and the worker can take as long as a shot takes, with retries handled by Cloud Tasks. The cost is that there are now two deployables that can't import each other's code. The worker's refund logic mirrors the app's, and the field names in Firestore are the contract between them, so changing one means changing both.
+With a queue, the app stays fast and the worker can take as long as a shot takes, with retries handled by Cloud Tasks. The cost is that there are now two deployables that can’t import each other’s code. The worker’s refund logic mirrors the app’s, and the field names in Firestore are the contract between them, so changing one means changing both.
 
 {/* TODO(moyo): if there was a launch, a migration or an outage where this paid off, one sentence here makes it land. */}
 
@@ -38,10 +38,10 @@ Gixel is live at gixel.net, and web and iOS share one project library.
 
 {/* TODO(moyo): add any number you can share: brands or users, campaigns generated, images per day. */}
 
-## What I'd do differently
+## What I’d do differently
 
-Finalize is still triggered from the browser: a web run is only copied into the shared library when its owner opens the Projects tab. Until then the iOS app can't see it, and some runs sat unfinalized for weeks. The durable fix is to finalize on the worker the moment a run settles, so no client has to be online for the work to land.
+Finalize is still triggered from the browser: a web run is only copied into the shared library when its owner opens the Projects tab. Until then the iOS app can’t see it, and some runs sat unfinalized for weeks. The durable fix is to finalize on the worker the moment a run settles, so no client has to be online for the work to land.
 
-I'd also stop the two deployables drifting. Right now the refund rules live in two places on purpose. A small shared package for the job and credit contract would let the worker and the app agree by construction instead of by comment.
+I’d also stop the two deployables drifting. Right now the refund rules live in two places on purpose. A small shared package for the job and credit contract would let the worker and the app agree by construction instead of by comment.
 
 {/* TODO(moyo): confirm these, or swap in what you'd actually change. It's stronger in your words. */}

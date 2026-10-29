@@ -1,74 +1,86 @@
 /**
- * Jobs and community roles — the 30-second recruiter scan.
- * Newest first. `impact` is one or two lines, numbers up front.
+ * Where the work happened. Newest first. `detail` is one or two lines,
+ * numbers up front; `sector` labels the strip under the home page's hero.
  */
 
 export interface Role {
-  period: string;
-  role: string;
   org: string;
-  impact: string;
-  tags: string[];
+  role: string;
+  period: string;
+  sector: string;
+  detail: string;
 }
 
-export const jobs: Role[] = [
+export const experience: Role[] = [
   {
-    period: "Jan 2026 — Present",
-    role: "Frontend Engineer",
     org: "Straqa",
-    impact:
-      "Building the frontend of a logistics infrastructure platform for African businesses, including a transportation management dashboard kept in sync with live data over REST APIs.",
-    tags: ["Next.js", "TypeScript", "TailwindCSS", "REST APIs"],
+    role: "Frontend engineer",
+    period: "2026 – now",
+    sector: "Logistics",
+    detail:
+      "The frontend of a logistics platform for African businesses, including a transportation management dashboard kept in sync with live data.",
   },
   {
-    period: "Oct 2025 — Present",
-    role: "Frontend Engineer",
     org: "Gixel",
-    impact:
-      "Led Gixel's move from iOS-only to the web: a Next.js app that turns one product photo into a full fashion campaign, with OpenAI, Gemini and Replicate behind it and Firebase shared with the iOS app.",
-    tags: ["Next.js", "TypeScript", "Firebase", "AI integration"],
+    role: "Lead web engineer",
+    period: "2025 – now",
+    sector: "AI",
+    detail:
+      "Took an iOS-only product to the web: the Next.js app, the generation pipeline, credits and billing.",
   },
   {
-    period: "Nov 2024 — Jun 2025",
-    role: "Frontend Developer",
+    org: "Social Shake",
+    role: "Freelance, sole developer",
+    period: "2025",
+    sector: "Marketplace & payments",
+    detail:
+      "A three-sided marketplace with escrow payments and live chat, built end to end for an Australian client.",
+  },
+  {
     org: "TechSynergy",
-    impact:
-      "Rebuilt the company site in React and TypeScript, and built the PrintEazy e-commerce UI — reusable components cut feature development time by 30%; SEO work lifted organic traffic 18%.",
-    tags: ["React", "TypeScript", "SEO"],
+    role: "Frontend developer",
+    period: "2024 – 2025",
+    sector: "E-commerce",
+    detail:
+      "Rebuilt the company site and the PrintEazy store UI. Shared components cut feature work by 30%; SEO work lifted organic traffic 18%.",
   },
   {
-    period: "Feb 2024 — Sep 2024",
-    role: "Frontend Developer",
-    org: "Laferla",
-    impact:
-      "Built Go-Digital, moving insurance cards into Apple and Google Wallet — a 25% jump in adoption. Reworked onboarding for 20% more sign-ups; code splitting cut navigation time 35%.",
-    tags: ["Next.js", "TypeScript", "Apple Wallet", "Google Wallet"],
+    org: "Laferla Insurance",
+    role: "Frontend developer",
+    period: "2024",
+    sector: "Insurance",
+    detail:
+      "Moved member insurance cards into Apple and Google Wallet, a 25% jump in adoption. Reworked onboarding for 20% more sign-ups.",
+  },
+  {
+    org: "DevFest Lagos",
+    role: "Frontend engineer, volunteer team",
+    period: "2024 – now",
+    sector: "Events & ticketing",
+    detail:
+      "The 2024 and 2025 event platforms for 4,000+ attendees. Helped raise accessibility from 82% to 96% (WCAG 2.1 AA).",
   },
 ];
 
-export const community: Role[] = [
+/** Community roles, for the About page. */
+export const community = [
   {
-    period: "May 2026",
-    role: "Hackathon Lead",
     org: "VibeCode Africa Lagos",
-    impact:
-      "Led a hackathon team that formed on the day and built a solution for agriculture.",
-    tags: ["Hackathon", "Mentoring"],
+    role: "Hackathon lead",
+    period: "May 2026",
+    detail: "Led a hackathon team that formed on the day and built a solution for agriculture.",
   },
   {
-    period: "2025", // TODO(moyo): month
-    role: "Frontend Mentor",
     org: "GDG LASU Bootcamp 2.0",
-    impact:
-      "Guided participants through frontend projects across the bootcamp.",
-    tags: ["Mentoring", "Frontend"],
+    role: "Frontend mentor",
+    period: "2025", // TODO(moyo): month
+    detail: "Guided participants through frontend projects across the bootcamp.",
   },
   {
-    period: "Aug 2024 — Present",
-    role: "Frontend Engineer, Digital Working Group",
     org: "DevFest Lagos",
-    impact:
-      "Frontend engineer on the team behind the 2024 and 2025 event platforms for 4,000+ attendees. Helped raise accessibility from 82% to 96% (WCAG 2.1 AA) and cut page rollout time by 25% with a shared component library.",
-    tags: ["Next.js", "TypeScript", "Accessibility", "Community"],
+    role: "Frontend engineer, Digital Working Group",
+    period: "2024 – now",
+    detail:
+      "On the team behind the 2024 and 2025 event platforms, and a shared component library that cut page rollout time by 25%.",
   },
 ];

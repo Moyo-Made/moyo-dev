@@ -1,281 +1,128 @@
 import Image from "next/image";
 import Link from "next/link";
-import type { Project } from "@/data/projects";
 import {
   alsoBuilt,
   featuredProjects,
-  mlProjects,
+  formatList,
   isExternal,
+  mlProjects,
+  projectDomain,
   projectHref,
+  projectScreens,
 } from "@/lib/projects";
-import { Section } from "@/components/section";
+import { Statement } from "@/components/statement";
+import { SectionLabel } from "@/components/panel";
+import { WorkShowcase } from "@/components/work-showcase";
+import { ArrowRight, ArrowUpRight } from "@/components/icons";
 
 /**
- * `02 — SELECTED WORK`: each case study as a plate — the screenshot in crop
- * marks with its caption, and a spec table beside it. Plates
- * alternate sides on wide screens. Smaller projects follow as a table, then
- * the machine-learning work as small cards — range, kept apart from the
- * product work.
+ * Selected work: the three case studies in one frame that turns between
+ * them, then the next four projects as tiles, each with its screen rising
+ * from the tile's foot.
  */
 export function WorkSection() {
-  return (
-    <Section
-      id="work"
-      caption={`${featuredProjects.length} featured · ${alsoBuilt.length + mlProjects.length} more`}
-    >
-      <ol className="space-y-24 md:space-y-32">
-        {featuredProjects.map((project, i) => (
-          <li key={project.slug}>
-            <Plate project={project} index={i + 1} flip={i % 2 === 1} />
-          </li>
-        ))}
-      </ol>
-
-      <h3 className="label-mono mt-28">Also built</h3>
-      <div
-        aria-hidden
-        className="label-mono mt-6 hidden grid-cols-[3.5rem_1fr_11rem_1rem] gap-x-4 border-b-2 border-ink pb-2 text-muted md:grid"
-      >
-        <span>Year</span>
-        <span>Project</span>
-        <span className="text-right">Stack</span>
-        <span />
-      </div>
-      <ul className="mt-6 border-t border-line md:mt-0 md:border-t-0">
-        {alsoBuilt.map((project) => (
-          <li key={project.slug} className="border-b border-line">
-            <AlsoBuiltRow project={project} />
-          </li>
-        ))}
-      </ul>
-
-      {mlProjects.length > 0 && (
-        <>
-          <h3 className="label-mono mt-20">Machine learning</h3>
-          <ul className="mt-6 grid gap-6 md:grid-cols-2">
-            {mlProjects.map((project) => (
-              <li key={project.slug}>
-                <MlCard project={project} />
-              </li>
-            ))}
-          </ul>
-        </>
-      )}
-    </Section>
-  );
-}
-
-function SmartLink({
-  href,
-  children,
-  ...props
-}: { href: string; children: React.ReactNode } & Omit<
-  React.ComponentProps<"a">,
-  "href"
->) {
-  return isExternal(href) ? (
-    <a href={href} target="_blank" rel="noreferrer" {...props}>
-      {children}
-    </a>
-  ) : (
-    <Link href={href} {...props}>
-      {children}
-    </Link>
-  );
-}
-
-function Plate({
-  project,
-  index,
-  flip,
-}: {
-  project: Project;
-  index: number;
-  flip: boolean;
-}) {
-  const href = projectHref(project);
-  const specs = [
-    { term: "Role", detail: project.role },
-    { term: "Year", detail: String(project.year) },
-    { term: "Stack", detail: project.stack.join(", ") },
-  ];
+  const tiles = alsoBuilt.filter((p) => p.image).slice(0, 4);
+  const more = alsoBuilt.length + mlProjects.length;
 
   return (
-    <article
-      aria-labelledby={`${project.slug}-title`}
-      className="group grid gap-x-6 gap-y-8 lg:grid-cols-12 lg:items-start"
-    >
-      {project.image && (
-        <figure
-          className={
-            flip ? "lg:order-2 lg:col-span-7 lg:col-start-6" : "lg:col-span-7"
-          }
-        >
-          <SmartLink
-            href={href ?? "#work"}
-            tabIndex={-1}
-            aria-hidden
-            className="ticks block p-3 group-hover:[--tick:var(--annot)]"
-          >
-            <span className="block overflow-hidden border border-line bg-paper-2">
-              <Image
-                src={project.image.src}
-                alt={project.image.alt}
-                width={1440}
-                height={900}
-                sizes="(min-width: 1200px) 680px, (min-width: 1024px) 56vw, 100vw"
-                className="aspect-[16/10] w-full object-cover object-top transition-transform duration-500 motion-safe:group-hover:scale-[1.02]"
-              />
-            </span>
-          </SmartLink>
-          <figcaption className="label-mono mt-3 px-3 text-muted">
-            {project.image.alt}
-          </figcaption>
-        </figure>
-      )}
+    <section id="work" aria-labelledby="work-title" className="relative shell py-24 md:py-32">
+      {/* The hero's screens link here, one anchor per project. */}
+      {featuredProjects.map((p) => (
+        <span key={p.slug} id={`work-${p.slug}`} className="absolute top-0" />
+      ))}
 
-      <div
-        className={
-          flip ? "lg:order-1 lg:col-span-5" : "lg:col-span-5 lg:col-start-8"
+      <SectionLabel n={1}>Work</SectionLabel>
+      <Statement id="work-title" title="Selected work." className="mt-8">
+        {
+          "Three products I’ve helped build and ship, each with a full write-up: the problem, the decisions, and what I’d change."
         }
-      >
-        <p className="label-mono text-muted lg:pt-3">
-          No. {String(index).padStart(2, "0")}
-        </p>
-        <h3
-          id={`${project.slug}-title`}
-          className="mt-3 font-display text-3xl leading-[1.05] font-semibold tracking-tight text-balance md:text-4xl"
-        >
-          {href ? (
-            <SmartLink
-              href={href}
-              className="underline decoration-transparent decoration-2 underline-offset-[0.15em] transition-colors hover:decoration-annot"
-            >
-              {project.title}
-            </SmartLink>
-          ) : (
-            project.title
-          )}
-        </h3>
-        <p className="mt-4 text-xl leading-snug text-pretty">{project.outcome}</p>
+      </Statement>
 
-        <dl className="mt-8 border-t-2 border-ink">
-          {specs.map((s) => (
-            <div
-              key={s.term}
-              className="grid grid-cols-[5rem_1fr] gap-x-4 border-b border-line py-3"
-            >
-              <dt className="label-mono pt-0.5 text-muted">{s.term}</dt>
-              <dd className="leading-snug">{s.detail}</dd>
-            </div>
-          ))}
-        </dl>
+      <div className="mt-14 md:mt-16">
+        <WorkShowcase
+          items={featuredProjects.map((p) => ({
+            slug: p.slug,
+            name: p.name,
+            outcome: p.outcome,
+            stack: formatList(p.stack),
+            domain: projectDomain(p),
+            live: p.links.live,
+            screens: projectScreens(p),
+            highlights: p.highlights,
+          }))}
+        />
+      </div>
 
-        <p className="label-mono mt-6 flex flex-wrap gap-x-6 gap-y-2">
-          {project.caseStudy && (
-            <Link
-              href={`/work/${project.slug}`}
-              className="bg-ink px-4 py-3 text-paper transition-colors hover:bg-annot"
-            >
-              Read the case study →
-            </Link>
-          )}
-          {project.links.live && (
-            <a
-              href={project.links.live}
-              target="_blank"
-              rel="noreferrer"
-              className="py-3 underline decoration-line underline-offset-8 hover:text-annot hover:decoration-annot"
-            >
-              Live ↗
-            </a>
-          )}
-          {project.links.code && (
-            <a
-              href={project.links.code}
-              target="_blank"
-              rel="noreferrer"
-              className="py-3 underline decoration-line underline-offset-8 hover:text-annot hover:decoration-annot"
-            >
-              Code ↗
-            </a>
-          )}
+      <div className="mt-28 md:mt-36">
+        <div className="flex items-end justify-between gap-6">
+          <h3 className="text-xl font-semibold tracking-[-0.02em]">Also built</h3>
+          <Link
+            href="/work"
+            className="inline-flex items-center gap-1.5 text-[0.9375rem] text-muted transition-colors hover:text-ink"
+          >
+            All {alsoBuilt.length + featuredProjects.length + mlProjects.length} projects
+            <ArrowRight className="nudge-out size-4" />
+          </Link>
+        </div>
+
+        <ul className="mt-6 grid gap-3 md:grid-cols-2 md:gap-4 lg:grid-cols-3">
+          {tiles.map((p, i) => {
+            const href = projectHref(p) ?? "/work";
+            const external = isExternal(href);
+            // Wide, narrow / narrow, wide: a staggered grid with no gaps.
+            const wide = i === 0 || i === 3;
+            return (
+              <li key={p.slug} className={wide ? "lg:col-span-2" : ""}>
+                <a
+                  href={href}
+                  {...(external && { target: "_blank", rel: "noreferrer" })}
+                  className="tile group flex h-[22rem] flex-col p-6 md:h-[26rem] md:p-7"
+                >
+                  <span className="flex items-start justify-between gap-4">
+                    <span className={wide ? "max-w-[24rem] lg:max-w-[40%]" : "max-w-[24rem]"}>
+                      <span className="block font-mono text-xs text-muted">{p.year}</span>
+                      <span className="mt-2 block text-lg font-semibold tracking-[-0.02em]">
+                        {p.name}
+                      </span>
+                      <span className="mt-1.5 block text-[0.9375rem] leading-relaxed text-pretty text-muted">
+                        {p.outcome}
+                      </span>
+                    </span>
+                    <span className="grid size-9 shrink-0 place-items-center rounded-full bg-surface shadow-[0_1px_2px_rgb(32_33_31/0.08)] transition-colors group-hover:bg-ink group-hover:text-surface">
+                      <ArrowUpRight className="nudge-out size-4" />
+                    </span>
+                  </span>
+                  <span
+                    className={`tile-shot window absolute bottom-0 block ${
+                      wide
+                        ? "right-0 left-10 rounded-r-none md:left-12 lg:right-7 lg:left-[48%] lg:rounded-r-[10px]"
+                        : "right-0 left-10 rounded-r-none md:left-12"
+                    }`}
+                  >
+                    <Image
+                      src={p.image!.src}
+                      alt=""
+                      width={p.image!.width}
+                      height={p.image!.height}
+                      sizes={
+                        wide ? "(min-width: 1024px) 600px, 90vw" : "(min-width: 1024px) 340px, 90vw"
+                      }
+                      className="block h-auto w-full"
+                    />
+                  </span>
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+        <p className="mt-6 text-sm text-muted">
+          Plus {more - tiles.length} more on{" "}
+          <Link href="/work" className="link">
+            the work page
+          </Link>
+          , including machine learning projects.
         </p>
       </div>
-    </article>
-  );
-}
-
-function AlsoBuiltRow({ project }: { project: Project }) {
-  const href = projectHref(project);
-  const body = (
-    <>
-      <span className="label-mono pt-1 text-muted">{project.year}</span>
-      <span>
-        <span className="font-display text-xl font-semibold">{project.title}</span>
-        <span className="mt-1 block text-muted">{project.outcome}</span>
-      </span>
-      <span className="label-mono hidden pt-1 text-right text-muted md:block">
-        {project.stack.slice(0, 2).join(" · ")}
-      </span>
-      <span aria-hidden className="pt-0.5 text-annot">
-        {href ? "↗" : ""}
-      </span>
-    </>
-  );
-  const grid =
-    "grid grid-cols-[3.5rem_1fr_1rem] gap-x-4 py-5 md:grid-cols-[3.5rem_1fr_11rem_1rem]";
-
-  return href ? (
-    <SmartLink
-      href={href}
-      className={`${grid} transition-colors hover:bg-paper-2`}
-    >
-      {body}
-    </SmartLink>
-  ) : (
-    <div className={grid}>{body}</div>
-  );
-}
-
-/** A small card for the machine-learning work: thumbnail, result, stack. */
-function MlCard({ project }: { project: Project }) {
-  const href = projectHref(project);
-  const body = (
-    <>
-      {project.image && (
-        <Image
-          src={project.image.src}
-          alt=""
-          width={320}
-          height={200}
-          sizes="(min-width: 640px) 8rem, 5rem"
-          className="aspect-[16/10] w-20 shrink-0 self-start border border-line object-cover object-top sm:w-32"
-        />
-      )}
-      <span className="min-w-0">
-        <span className="font-display text-xl leading-tight font-semibold">
-          {project.title}
-          {href && <span className="ml-1.5 text-annot">↗</span>}
-        </span>
-        <span className="mt-1 block leading-snug text-muted">{project.outcome}</span>
-        <span className="label-mono mt-3 block text-muted">
-          {project.stack.slice(0, 3).join(" · ")}
-        </span>
-      </span>
-    </>
-  );
-  // Below 320px there's no room beside the thumbnail, so it goes on top.
-  const card = "ticks flex h-full flex-col gap-4 p-4 min-[20rem]:flex-row";
-
-  return href ? (
-    <SmartLink
-      href={href}
-      className={`${card} transition-colors hover:bg-paper-2 hover:[--tick:var(--annot)]`}
-    >
-      {body}
-    </SmartLink>
-  ) : (
-    <div className={card}>{body}</div>
+    </section>
   );
 }

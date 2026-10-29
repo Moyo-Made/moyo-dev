@@ -6,11 +6,8 @@ export const size = { width: 180, height: 180 };
 export const contentType = "image/png";
 
 // Read at module load (build time), so the icon stays static.
-const display = await readFile(
-  join(
-    process.cwd(),
-    "node_modules/@fontsource/ibm-plex-sans-condensed/files/ibm-plex-sans-condensed-latin-600-normal.woff",
-  ),
+const semibold = await readFile(
+  join(process.cwd(), "node_modules/geist/dist/fonts/geist-sans/Geist-SemiBold.ttf"),
 );
 
 /** Home-screen icon. iOS rounds the corners itself, so this one is square. */
@@ -24,10 +21,12 @@ export default async function AppleIcon() {
           justifyContent: "center",
           width: "100%",
           height: "100%",
-          background: "#121418",
-          fontFamily: "IBM Plex Sans Condensed",
-          fontSize: 116,
-          color: "#f5f6f3",
+          background: "#20211f",
+          fontFamily: "Geist",
+          fontWeight: 600,
+          fontSize: 104,
+          letterSpacing: "-0.04em",
+          color: "#f8f8f5",
           position: "relative",
         }}
       >
@@ -35,15 +34,16 @@ export default async function AppleIcon() {
         <div
           style={{
             position: "absolute",
-            right: 28,
-            bottom: 28,
-            width: 28,
-            height: 28,
-            background: "#f2b705",
+            right: 30,
+            bottom: 30,
+            width: 20,
+            height: 20,
+            borderRadius: 10,
+            background: "#2f8b65",
           }}
         />
       </div>
     ),
-    { ...size, fonts: [{ name: "IBM Plex Sans Condensed", data: display, weight: 600 }] },
+    { ...size, fonts: [{ name: "Geist", data: semibold, weight: 600 }] },
   );
 }

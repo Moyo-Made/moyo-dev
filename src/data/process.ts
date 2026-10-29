@@ -1,23 +1,37 @@
 /**
- * "How I build" — four steps, told through one project (Social Shake) so the
- * section reads as a story, not a list of virtues. Every claim here is backed
- * by its case study; rewrite in your own words. TODO(moyo)
+ * "How I work" — five steps, each shown on one project (Social Shake) so the
+ * section reads as a story, not a list of virtues. Every example is backed
+ * by the Social Shake case study.
  */
-export const buildSteps = [
+export const steps = [
   {
-    title: "Scope",
-    body: "Find the real requirement under the stated one. Social Shake was pitched as “a UGC marketplace”. The real problem was trust: someone always had to go first, the brand paying or the creator filming.",
+    title: "Understand the problem",
+    body: "Find the real requirement under the stated one, before writing any code.",
+    example:
+      "It was pitched as a UGC marketplace. The real problem was trust: someone always had to go first.",
   },
   {
-    title: "Design",
-    body: "Make the hardest moment easy. For brands that was writing the brief, so it became four short steps, with a live cost estimate next to the creator picker before they commit.",
+    title: "Agree the scope",
+    body: "Decide what the first release has to get right, and what can wait.",
+    example:
+      "Writing a brief was the hardest moment for brands, so it became four short steps with a live cost estimate.",
   },
   {
-    title: "Ship",
-    body: "Make the product keep its promises. “You only pay for approved videos” is enforced, not just written: the card is held at checkout and charged only on approval. 100MB uploads and live updates were handled before launch, not after.",
+    title: "Build it properly",
+    body: "Usability, performance and maintainability are part of the work, not a later phase.",
+    example:
+      "Videos up to 100MB go up in 1MB chunks, because a single request on Vercel can’t carry them.",
   },
   {
-    title: "Write it up",
-    body: "Every project ends with what I'd change. On Social Shake: card holds expire after about a week, so longer projects should charge up front and hold the funds instead.",
+    title: "Test, refine, ship",
+    body: "Make sure the product keeps its promises once real people use it.",
+    example:
+      "Payment webhooks are recorded as they arrive, so one delivered twice is skipped, not processed again.",
+  },
+  {
+    title: "Keep everyone informed",
+    body: "Clear updates in plain language, and a written record of what I’d change next.",
+    example:
+      "The write-up ends with what I’d fix: card holds expire after about a week, so long projects should charge up front.",
   },
 ];

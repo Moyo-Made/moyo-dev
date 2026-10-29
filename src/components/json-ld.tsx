@@ -13,7 +13,7 @@ export function PersonJsonLd() {
     name: site.name,
     alternateName: site.shortName,
     jobTitle: site.role,
-    description: site.tagline,
+    description: site.description,
     url: siteUrl,
     email: `mailto:${site.email}`,
     address: {
